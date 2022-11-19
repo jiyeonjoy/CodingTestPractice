@@ -1,5 +1,49 @@
 import Foundation
 
+/* 최빈값 구하기
+
+ - 최빈값은 주어진 값 중에서 가장 자주 나오는 값을 의미합니다. 정수 배열 array가 매개변수로 주어질 때, 최빈값을 return 하도록 solution 함수를 완성해보세요. 최빈값이 여러 개면 -1을 return 합니다.
+*/
+func solution12(_ array: [Int]) -> Int {
+    let sorted = Dictionary(grouping: array) { $0 }.sorted { $0.value.count > $1.value.count }
+    return sorted.count > 1 && sorted[0].value.count == sorted[1].value.count ? -1 : sorted[0].key
+}
+
+func solution11(_ array:[Int]) -> Int {
+    var maxCount:Int = 0
+    var result:Int = 0
+        
+    let arrays:[Int] = array.sorted()
+        
+    var currentNum: Int = arrays[0]
+    var currentCount: Int = 0
+        
+    for num in arrays {
+        if (currentNum == num) {
+            currentCount += 1
+        } else {
+            if (currentCount > maxCount) {
+                maxCount = currentCount
+                result = currentNum
+            } else if (maxCount == currentCount) {
+                result = -1
+            }
+            currentNum = num
+            currentCount = 1
+        }
+    }
+    
+    if (currentCount > maxCount) {
+        result = currentNum
+    } else if (currentCount == maxCount) {
+        result = -1
+    }
+    
+    return result
+}
+
+solution12([1,2,2,2,1,1,1,1,1,3,3,3,3,3,3])
+
 /* 중앙값 구하기
 
  - 중앙값은 어떤 주어진 값들을 크기의 순서대로 정렬했을 때 가장 중앙에 위치하는 값을 의미합니다. 예를 들어 1, 2, 7, 10, 11의 중앙값은 7입니다. 정수 배열 array가 매개변수로 주어질 때, 중앙값을 return 하도록 solution 함수를 완성해보세요.
