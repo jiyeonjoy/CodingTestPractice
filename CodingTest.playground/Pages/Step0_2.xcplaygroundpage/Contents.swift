@@ -1,5 +1,26 @@
 import Foundation
 
+/* 짝수 홀수 개수
+ 
+ - 정수가 담긴 리스트 num_list가 주어질 때, num_list의 원소 중 짝수와 홀수의 개수를 담은 배열을 return 하도록 solution 함수를 완성해보세요.
+*/
+func solution6(_ numList: [Int]) -> [Int] { [numList.filter { $0 % 2 == 0 }.count, numList.filter { $0 % 2 == 1 }.count] }
+
+func solution5(_ num_list:[Int]) -> [Int] {
+    var even:Int = 0
+    var odd:Int = 0
+    for i in num_list {
+        if i % 2 == 0 {
+            even += 1
+        } else {
+            odd += 1
+        }
+    }
+    return [even, odd]
+}
+
+solution5([1, 2, 3, 4, 5])
+
 /* 직각삼각형 출력하기
 
  - "*"의 높이와 너비를 1이라고 했을 때, "*"을 이용해 직각 이등변 삼각형을 그리려고합니다. 정수 n 이 주어지면 높이와 너비가 n 인 직각 이등변 삼각형을 출력하도록 코드를 작성해보세요.
