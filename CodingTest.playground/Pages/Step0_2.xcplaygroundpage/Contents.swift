@@ -1,5 +1,27 @@
 import Foundation
 
+/* 양꼬치
+
+ - 머쓱이네 양꼬치 가게는 10인분을 먹으면 음료수 하나를 서비스로 줍니다. 양꼬치는 1인분에 12,000원, 음료수는 2,000원입니다. 정수 n과 k가 매개변수로 주어졌을 때, 양꼬치 n인분과 음료수 k개를 먹었다면 총얼마를 지불해야 하는지 return 하도록 solution 함수를 완성해보세요.
+*/
+func solution13(_ n:Int, _ k:Int) -> Int {
+    guard (n > 0 && n < 1000), ((k >= (n / 10)) && k < 1000) else {
+        return 0
+    }
+    let ramPrice: Int = 12000
+    let drinkPrice: Int = 2000
+    return (n * ramPrice) + ( (k - (n/10)) * drinkPrice)
+}
+
+func solution12(_ n:Int, _ k:Int) -> Int {
+    var service:Int = n/10
+    var price1:Int = n*12000
+    var price2:Int = k-service > 0 ? (k-service)*2000 : 0
+    return price1 + price2
+}
+
+solution12(10,3)
+
 /* 각도기
 
  - 각에서 0도 초과 90도 미만은 예각, 90도는 직각, 90도 초과 180도 미만은 둔각 180도는 평각으로 분류합니다. 각 angle이 매개변수로 주어질 때 예각일 때 1, 직각일 때 2, 둔각일 때 3, 평각일 때 4를 return하도록 solution 함수를 완성해주세요.
