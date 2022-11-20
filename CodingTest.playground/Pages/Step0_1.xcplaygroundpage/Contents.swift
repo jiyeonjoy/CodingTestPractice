@@ -1,56 +1,39 @@
 import Foundation
 
-// Dictionary
-// var dic1 = ["key1":1, "key2":"2"] // error
-var dic1:[String:Any] = ["key1":1, "key2":"2"] // key는 Any 타입 안됨
-// var dic2 = [:] // error
-var dic2:[String:Int] = [:]
-
-var count:Int = dic1.count
-var isEmpty:Bool = dic2.isEmpty
-
-var dic3 = ["key1":1, "key2":2, "key3":3]
-var value1 = dic3["key1"]
-var value4 = dic3["key4"]
-var value2 = dic1["key2"]
-var isSame:Bool = value1 == 1
-
-// delete
-dic3["key3"] = nil
-//dic3.removeValue(forKey: "key1")
-//dic3.removeAll()
-dic3.keys
-dic3.keys.sorted()
-dic3.values
-dic3.values.sorted()
-
-var dict11 = ["height": 165, "age" : 100]
-var dict22 = ["height": 165, "age" : 100]
-var dict33 = ["Height": 165, "Age" : 100]
-var dict44 = ["name": "sodeul", "address" : "Suwon"]
-dict11 == dict22 // key, value 모두 같을때만 true
-
-let condition: ((String, Int)) -> Bool = {
-    $0.0.contains("h")
-}
-dict11.contains(where: {(key: String, value: Int) -> Bool in
-    return key.contains("h")
-})
-dict11.contains(where: condition)
-dict11.filter(condition)
-dict11.first(where: condition)
-
 /* 최빈값 구하기
 
  - 최빈값은 주어진 값 중에서 가장 자주 나오는 값을 의미합니다. 정수 배열 array가 매개변수로 주어질 때, 최빈값을 return 하도록 solution 함수를 완성해보세요. 최빈값이 여러 개면 -1을 return 합니다.
 */
 func solution13(_ array: [Int]) -> Int {
+//    var dic = Dictionary(grouping: array) { $0 }.sorted {
+//        $0.value.count > $1.value.count
+//    }
+//    return dic.count > 1 && dic[0].value.count == dic[1].value.count ? -1 : dic[0].key
+    
+    var dic:[Int:Int]=[:]
+    for num in array {
+        let count:Int = dic[num] ?? 0
+        dic[num] = count+1
+    }
+    var sorted = dic.sorted(by: {$0.value > $1.value})
+    var result:Int = 0
+    if sorted.count > 1 && sorted[0].value == sorted[1].value {
+        result = -1
+    } else {
+        result = sorted[0].key
+    }
+    return result
 }
+
+solution13([1,2,2,2,1,1,1,1,1,3,3,3,3,3,3])
 
 func solution12(_ array: [Int]) -> Int {
     let sorted = Dictionary(grouping: array) { $0 }.sorted { $0.value.count > $1.value.count }
+    sorted
     return sorted.count > 1 && sorted[0].value.count == sorted[1].value.count ? -1 : sorted[0].key
 }
+
+solution12([1,2,2,2,1,1,1,1,1,3,3,3,3,3,3])
 
 func solution11(_ array:[Int]) -> Int {
     var maxCount:Int = 0
