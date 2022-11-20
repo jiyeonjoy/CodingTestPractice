@@ -1,5 +1,19 @@
 import Foundation
 
+/* 문자 반복 출력하기
+ 
+ - 문자열 my_string과 정수 n이 매개변수로 주어질 때, my_string에 들어있는 각 문자를 n만큼 반복한 문자열을 return 하도록 solution 함수를 완성해보세요.
+*/
+func solution7(_ my_string:String, _ n:Int) -> String {
+    var result:String = ""
+    for str in my_string {
+        result += String(repeating: str, count: n)
+    }
+    return result
+}
+
+solution7("hello", 4)
+
 /* 짝수 홀수 개수
  
  - 정수가 담긴 리스트 num_list가 주어질 때, num_list의 원소 중 짝수와 홀수의 개수를 담은 배열을 return 하도록 solution 함수를 완성해보세요.
