@@ -1,5 +1,24 @@
 import Foundation
 
+/* 순서쌍의 개수
+
+ - 순서쌍이란 두 개의 숫자를 순서를 정하여 짝지어 나타낸 쌍으로 (a, b)로 표기합니다. 자연수 n이 매개변수로 주어질 때 두 숫자의 곱이 n인 자연수 순서쌍의 개수를 return하도록 solution 함수를 완성해주세요.
+*/
+func solution22(_ n: Int) -> Int { (1...n).filter { n % $0 == 0 }.count }
+
+func solution21(_ n:Int) -> Int {
+    var result: Int = 1
+    if n == 1 {
+        return 1
+    }
+    for i in 1...n/2 {
+        if n % i == 0 {
+            result += 1
+        }
+    }
+    return result
+}
+
 /* 진료 순서 정하기
 
  - 외과의사 머쓱이는 응급실에 온 환자의 응급도를 기준으로 진료 순서를 정하려고 합니다. 정수 배열 emergency가 매개변수로 주어질 때 응급도가 높은 순서대로 진료 순서를 정한 배열을 return하도록 solution 함수를 완성해주세요.
