@@ -1,5 +1,17 @@
 import Foundation
 
+/* 숨어있는 숫자의 덧셈 (1)
+
+ - 문자열 my_string이 매개변수로 주어집니다. my_string안의 모든 자연수들의 합을 return하도록 solution 함수를 완성해주세요.
+*/
+func solution17(_ my_string:String) -> Int {
+     return my_string.compactMap{Int(String($0))}.reduce(0,+)
+}
+
+func solution16(_ my_string:String) -> Int { my_string.filter { $0.isNumber }.map{ Int(String($0)) ?? 0 }.reduce(0, +) }
+
+solution16("aAb1B2cC34oOp")
+
 /* 문자열 정렬하기 (1)
 
  - 문자열 my_string이 매개변수로 주어질 때, my_string 안에 있는 숫자만 골라 오름차순 정렬한 리스트를 return 하도록 solution 함수를 작성해보세요.
