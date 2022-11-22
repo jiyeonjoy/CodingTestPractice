@@ -1,5 +1,24 @@
 import Foundation
 
+/* 컨트롤 제트
+
+ - 숫자들이 공백으로 구분된 문자열이 주어집니다. 문자열에 있는 숫자를 차례대로 더하려고 합니다. 이 때 “Z”가 나오면 바로 전에 더했던 숫자를 뺀다는 뜻입니다. 숫자와 “Z”로 이루어진 문자열 s가 주어질 때, 머쓱이가 구한 값을 return 하도록 solution 함수를 완성해보세요.
+*/
+func solution19(_ s:String) -> Int {
+    var list:[String] = s.components(separatedBy: " ")
+    var sumList:[Int] = []
+    for num in list {
+        if num == "Z" {
+            sumList.removeLast()
+        } else {
+            sumList.append( Int(num) ?? 0 )
+        }
+    }
+    return sumList.reduce(0,+)
+}
+
+solution19("1 2 Z 3")
+
 /* 소인수분해
 
  - 소인수분해란 어떤 수를 소수들의 곱으로 표현하는 것입니다. 예를 들어 12를 소인수 분해하면 2 * 2 * 3 으로 나타낼 수 있습니다. 따라서 12의 소인수는 2와 3입니다. 자연수 n이 매개변수로 주어질 때 n의 소인수를 오름차순으로 담은 배열을 return하도록 solution 함수를 완성해주세요.
