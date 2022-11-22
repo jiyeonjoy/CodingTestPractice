@@ -1,5 +1,31 @@
 import Foundation
 
+/* 모음 제거
+
+ - 영어에선 a, e, i, o, u 다섯 가지 알파벳을 모음으로 분류합니다. 문자열 my_string이 매개변수로 주어질 때 모음을 제거한 문자열을 return하도록 solution 함수를 완성해주세요.
+*/
+func solution13(_ my_string:String) -> String {
+    return my_string.replacingOccurrences(of: "[aeiou]", with: "", options: .regularExpression)
+}
+
+func solution12(_ my_string:String) -> String {
+    return my_string.components(separatedBy: ["a", "e", "i", "o", "u"]).joined()
+}
+
+func solution11(_ my_string:String) -> String {
+    return my_string.filter { !["a", "e", "i", "o", "u"].contains($0)}
+}
+
+func solution10(_ my_string:String) -> String {
+    my_string.replacingOccurrences(of: "a", with: "").replacingOccurrences(of: "e", with: "").replacingOccurrences(of: "i", with: "").replacingOccurrences(of: "o", with: "").replacingOccurrences(of: "u", with: "")
+}
+
+// time error
+func solution9(_ my_string:String) -> String { my_string.filter{ String($0) != "a" && String($0) != "e" && String($0) != "i" && String($0) != "o" && String($0) != "u" }
+}
+
+solution9("nice to meet you")
+
 /* 팩토리얼
 
  - i팩토리얼 (i!)은 1부터 i까지 정수의 곱을 의미합니다. 예를들어 5! = 5 * 4 * 3 * 2 * 1 = 120 입니다. 정수 n이 주어질 때 다음 조건을 만족하는 가장 큰 정수 i를 return 하도록 solution 함수를 완성해주세요.
