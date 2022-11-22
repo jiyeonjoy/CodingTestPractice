@@ -1,5 +1,28 @@
 import Foundation
 
+/* 합성수 찾기
+ 
+ - 약수의 개수가 세 개 이상인 수를 합성수라고 합니다. 자연수 n이 매개변수로 주어질 때 n이하의 합성수의 개수를 return하도록 solution 함수를 완성해주세요.
+*/
+func solution6(_ n: Int) -> Int { (1...n).filter { i in (1...i).filter { i % $0 == 0 }.count > 2 }.count }
+
+func isPrime(num: Int) -> Bool {
+    if(num<4) {
+        return num == 1 ? false : true
+    }
+    for i in 2...Int(sqrt(Double(num))) {
+        if(num % i == 0) { return false }
+    }
+    return true
+}
+
+func solution5(_ n:Int) -> Int {
+    if n < 4 {
+        return 0
+    }
+    return (4...n).filter { !isPrime(num: $0) }.count
+}
+
 /* 주사위의 개수
  
  - 머쓱이는 직육면체 모양의 상자를 하나 가지고 있는데 이 상자에 정육면체 모양의 주사위를 최대한 많이 채우고 싶습니다. 상자의 가로, 세로, 높이가 저장되어있는 배열 box와 주사위 모서리의 길이 정수 n이 매개변수로 주어졌을 때, 상자에 들어갈 수 있는 주사위의 최대 개수를 return 하도록 solution 함수를 완성해주세요.
