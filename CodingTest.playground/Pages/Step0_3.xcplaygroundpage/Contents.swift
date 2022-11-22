@@ -1,5 +1,25 @@
 import Foundation
 
+/* 팩토리얼
+
+ - i팩토리얼 (i!)은 1부터 i까지 정수의 곱을 의미합니다. 예를들어 5! = 5 * 4 * 3 * 2 * 1 = 120 입니다. 정수 n이 주어질 때 다음 조건을 만족하는 가장 큰 정수 i를 return 하도록 solution 함수를 완성해주세요.
+ 
+ i! ≤ n
+*/
+func solution8(_ n:Int) -> Int {
+    
+    if n == 1 {
+        return 1
+    }
+    var result: Int = 1
+    var multiply: Int = 1
+    while multiply <= n {
+        result += 1
+        multiply *= result
+    }
+    return result-1
+}
+
 /* 최댓값 만들기 (1)
 
  - 정수 배열 numbers가 매개변수로 주어집니다. numbers의 원소 중 두 개를 곱해 만들 수 있는 최댓값을 return하도록 solution 함수를 완성해주세요.
