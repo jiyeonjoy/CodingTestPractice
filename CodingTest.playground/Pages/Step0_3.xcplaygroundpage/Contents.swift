@@ -7,7 +7,6 @@ import Foundation
  i! ≤ n
 */
 func solution8(_ n:Int) -> Int {
-    
     if n == 1 {
         return 1
     }
