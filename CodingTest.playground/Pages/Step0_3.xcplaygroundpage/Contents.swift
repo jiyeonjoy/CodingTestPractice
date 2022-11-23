@@ -3,6 +3,70 @@ import Foundation
 
  -
 */
+/* 안전지대
+
+ - 다음 그림과 같이 지뢰가 있는 지역과 지뢰에 인접한 위, 아래, 좌, 우 대각선 칸을 모두 위험지역으로 분류합니다.
+ 지뢰는 2차원 배열 board에 1로 표시되어 있고 board에는 지뢰가 매설 된 지역 1과, 지뢰가 없는 지역 0만 존재합니다.
+ 지뢰가 매설된 지역의 지도 board가 매개변수로 주어질 때, 안전한 지역의 칸 수를 return하도록 solution 함수를 완성해주세요.
+*/
+func solution26(_ board:[[Int]]) -> Int {
+    var copy = board
+    for i in 0...board.count-1 {
+        for j in 0...board.count-1 {
+            if board[i][j] == 1 {
+                if i != 0 && j != 0 {
+                    if copy[i-1][j-1] != 1 {
+                        copy[i-1][j-1] = 2
+                    }
+                }
+                if i != 0 {
+                    if copy[i-1][j] != 1 {
+                        copy[i-1][j] = 2
+                    }
+                }
+                if i != 0 && j+1 < board.count {
+                    if copy[i-1][j+1] != 1 {
+                        copy[i-1][j+1] = 2
+                    }
+                }
+                if j != 0 {
+                    if copy[i][j-1] != 1 {
+                        copy[i][j-1] = 2
+                    }
+                }
+                if j+1 < board.count {
+                    if copy[i][j+1] != 1 {
+                        copy[i][j+1] = 2
+                    }
+                }
+                if i+1 < board.count && j != 0 {
+                    if copy[i+1][j-1] != 1 {
+                        copy[i+1][j-1] = 2
+                    }
+                }
+                if i+1 < board.count {
+                    if copy[i+1][j] != 1 {
+                        copy[i+1][j] = 2
+                    }
+                }
+                if i+1 < board.count && j+1 < board.count {
+                    if copy[i+1][j+1] != 1 {
+                        copy[i+1][j+1] = 2
+                    }
+                }
+            }
+        }
+    }
+    var result:Int = 0
+    for i in 0...board.count-1 {
+        result += copy[i].filter { $0==0 }.count
+    }
+    return result
+}
+
+//solution26([[0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 1, 1, 0], [0, 0, 0, 0, 0]])
+solution26([[1, 1, 1, 1, 1, 1], [1, 1, 1, 1, 1, 1], [1, 1, 1, 1, 1, 1], [1, 1, 1, 1, 1, 1], [1, 1, 1, 1, 1, 1], [1, 1, 1, 1, 1, 1]])
+
 /* 숨어있는 숫자의 덧셈 (2)
 
  - 문자열 my_string이 매개변수로 주어집니다. my_string은 소문자, 대문자, 자연수로만 구성되어있습니다. my_string안의 자연수들의 합을 return하도록 solution 함수를 완성해주세요.
