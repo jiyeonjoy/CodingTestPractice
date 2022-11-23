@@ -3,6 +3,38 @@ import Foundation
 
  -
 */
+/* 다항식 더하기
+
+ - 한 개 이상의 항의 합으로 이루어진 식을 다항식이라고 합니다. 다항식을 계산할 때는 동류항끼리 계산해 정리합니다. 덧셈으로 이루어진 다항식 polynomial이 매개변수로 주어질 때, 동류항끼리 더한 결괏값을 문자열로 return 하도록 solution 함수를 완성해보세요. 같은 식이라면 가장 짧은 수식을 return 합니다.
+*/
+func solution24(_ polynomial:String) -> String {
+    var first:Int = 0
+    var second:Int = 0
+    polynomial.components(separatedBy: " + ").map {
+        if $0.contains("x") {
+            first += (Int(String($0.replacingOccurrences(of: "x", with: ""))) ?? 1)
+        } else {
+            second += (Int($0) ?? 0)
+        }
+    }
+    var result:String = ""
+    if first != 0 {
+        if first == 1 {
+            result += "x"
+        } else {
+            result += "\(first)x"
+        }
+        if second != 0 {
+            result += " + \(second)"
+        }
+    } else {
+        if second != 0 {
+            result += "\(second)"
+        }
+    }
+    
+    return result
+}
 
 /* 최댓값 만들기 (2)
 
