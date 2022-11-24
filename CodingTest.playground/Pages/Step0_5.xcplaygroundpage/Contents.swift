@@ -57,14 +57,35 @@ import Foundation
 
  -
 */
-/*
 
- -
-*/
-/*
+/* 숫자 찾기
 
- -
+ - 정수 num과 k가 매개변수로 주어질 때, num을 이루는 숫자 중에 k가 있으면 num의 그 숫자가 있는 자리 수를 return하고 없으면 -1을 return 하도록 solution 함수를 완성해보세요.
 */
+func solution6(_ num:Int, _ k:Int) -> Int {
+    var str:String = String(num)
+    for i in 0...str.count-1 {
+        if String(str[str.index(str.startIndex, offsetBy: i)]) == String(k) {
+            return i+1
+        }
+        
+    }
+    return -1
+}
+
+/* 배열의 유사도
+
+ - 두 배열이 얼마나 유사한지 확인해보려고 합니다. 문자열 배열 s1과 s2가 주어질 때 같은 원소의 개수를 return하도록 solution 함수를 완성해주세요.
+*/
+func solution5(_ s1:[String], _ s2:[String]) -> Int {
+    var count:Int = 0
+    for s in s1 {
+        if s2.contains(s) {
+            count += 1
+        }
+    }
+    return count
+}
 
 /* 문자열 계산하기
 
