@@ -65,10 +65,33 @@ import Foundation
 
  -
 */
-/*
 
- -
+/* 문자열 계산하기
+
+ - my_string은 "3 + 5"처럼 문자열로 된 수식입니다. 문자열 my_string이 매개변수로 주어질 때, 수식을 계산한 값을 return 하는 solution 함수를 완성해주세요.
 */
+func solution4(_ my_string:String) -> Int {
+    var result = 0
+    var isSum = true
+    my_string.components(separatedBy: " ").map {
+        if $0 == "+" {
+            isSum = true
+        } else if $0 == "-" {
+            isSum = false
+        } else {
+            if result == 0 {
+                result = Int($0) ?? 0
+            } else if isSum {
+                result += Int($0) ?? 0
+            } else {
+                result -= Int($0) ?? 0
+            }
+        }
+    }
+    return result
+}
+
+solution4("3 + 4")
 
 /* 가장 큰 수 찾기
 
