@@ -45,14 +45,47 @@ import Foundation
 
  -
 */
-/*
 
- -
-*/
-/*
+/* OX퀴즈
 
- -
+ - 덧셈, 뺄셈 수식들이 'X [연산자] Y = Z' 형태로 들어있는 문자열 배열 quiz가 매개변수로 주어집니다. 수식이 옳다면 "O"를 틀리다면 "X"를 순서대로 담은 배열을 return하도록 solution 함수를 완성해주세요.
 */
+func solution9(_ quiz:[String]) -> [String] {
+    var result:[String] = []
+    for q in quiz {
+        var list = q.components(separatedBy: " ")
+        if list[1] == "-" {
+            if Int(list[0])! - Int(list[2])! == Int(list[4])! {
+                result.append("O")
+            } else {
+                result.append("X")
+            }
+        } else {
+            if Int(list[0])! + Int(list[2])! == Int(list[4])! {
+                result.append("O")
+            } else {
+                result.append("X")
+            }
+        }
+    }
+    return result
+}
+
+solution9(["3 - 4 = -3", "5 + 6 = 11"])
+
+/* 자릿수 더하기
+
+ - 정수 n이 매개변수로 주어질 때 n의 각 자리 숫자의 합을 return하도록 solution 함수를 완성해주세요
+*/
+func solution8(_ n:Int) -> Int {
+    var result:Int = 0
+    String(n).map {
+        result += Int(String($0)) ?? 0
+    }
+    return result
+}
+
+solution8(123)
 
 /* n의 배수 고르기
 
