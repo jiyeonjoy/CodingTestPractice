@@ -1,9 +1,19 @@
 import Foundation
 
-/*
+/* 한 번만 등장한 문자
 
- -
+ - 문자열 s가 매개변수로 주어집니다. s에서 한 번만 등장하는 문자를 사전 순으로 정렬한 문자열을 return 하도록 solution 함수를 완성해보세요. 한 번만 등장하는 문자가 없을 경우 빈 문자열을 return 합니다.
 */
+func solution23(_ s:String) -> String {
+    var dic = Dictionary(grouping: s) { $0 }.sorted {
+        $0.key < $1.key
+    }.filter {
+        $0.value.count == 1
+    }
+    return String(dic.map{ $0.key })
+}
+
+solution23("abcabcadc")
 
 /* 인덱스 바꾸기
 
