@@ -4,10 +4,20 @@ import Foundation
 
  -
 */
-/*
 
- -
+/* 인덱스 바꾸기
+
+ - 문자열 my_string과 정수 num1, num2가 매개변수로 주어질 때, my_string에서 인덱스 num1과 인덱스 num2에 해당하는 문자를 바꾼 문자열을 return 하도록 solution 함수를 완성해보세요.
 */
+func solution22(_ my_string:String, _ num1:Int, _ num2:Int) -> String {
+    var list = Array(my_string)
+    var data:Character = list[num1]
+    list[num1] = list[num2]
+    list[num2] = data
+    return String(list)
+}
+
+solution22("hello", 1,2)
 
 /* 영어가 싫어요
 
