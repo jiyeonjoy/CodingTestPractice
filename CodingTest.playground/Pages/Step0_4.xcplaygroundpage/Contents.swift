@@ -88,6 +88,18 @@ import Foundation
  5    7    10    16
  정수 n이 매개변수로 주어질 때, n을 3x 마을에서 사용하는 숫자로 바꿔 return하도록 solution 함수를 완성해주세요.
 */
+func solution2(_ n: Int) -> Int {
+    var answer = 0
+
+    for i in 1..<n + 1 {
+        answer += 1
+        while answer % 3 == 0 || String(answer).contains("3") {
+            answer += 1
+        }
+    }
+    return answer
+}
+
 func solution(_ n:Int) -> Int {
     var result:Int = 0
     var list:[Int] = []
