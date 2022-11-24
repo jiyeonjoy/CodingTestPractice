@@ -69,10 +69,20 @@ import Foundation
 
  -
 */
-/*
 
- -
+/* 가장 큰 수 찾기
+
+ - 정수 배열 array가 매개변수로 주어질 때, 가장 큰 수와 그 수의 인덱스를 담은 배열을 return 하도록 solution 함수를 완성해보세요.
 */
+func solution3(_ array:[Int]) -> [Int] {
+    var max:Int = array.sorted(by: >).first ?? 0
+    var index:Int = array.firstIndex(of: max) ?? 0
+
+    return [max, index]
+}
+
+solution3([1,2,3])
+
 /* 편지
 
  - 머쓱이는 할머니께 생신 축하 편지를 쓰려고 합니다. 할머니가 보시기 편하도록 글자 한 자 한 자를 가로 2cm 크기로 적으려고 하며, 편지를 가로로만 적을 때, 축하 문구 message를 적기 위해 필요한 편지지의 최소 가로길이를 return 하도록 solution 함수를 완성해주세요.
