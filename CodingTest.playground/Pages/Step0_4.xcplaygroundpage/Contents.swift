@@ -72,10 +72,29 @@ import Foundation
 
  -
 */
-/*
+/* 평행
 
- -
+ - 점 네 개의 좌표를 담은 이차원 배열  dots가 다음과 같이 매개변수로 주어집니다.
+ 
+ [[x1, y1], [x2, y2], [x3, y3], [x4, y4]]
+ 주어진 네 개의 점을 두 개씩 이었을 때, 두 직선이 평행이 되는 경우가 있으면 1을 없으면 0을 return 하도록 solution 함수를 완성해보세요.
 */
+func solution3(_ dots:[[Int]]) -> Int {
+    if Double(dots[0][1] - dots[1][1])/Double(dots[0][0]-dots[1][0])
+    == Double(dots[2][1] - dots[3][1])/Double(dots[2][0]-dots[3][0]) {
+        return 1
+    }
+    if Double(dots[0][1] - dots[2][1])/Double(dots[0][0]-dots[2][0])
+    == Double(dots[1][1] - dots[3][1])/Double(dots[1][0]-dots[3][0]) {
+        return 1
+    }
+    if Double(dots[0][1] - dots[3][1])/Double(dots[0][0]-dots[3][0])
+    == Double(dots[2][1] - dots[1][1])/Double(dots[2][0]-dots[1][0]) {
+        return 1
+    }
+    return 0
+}
+
 /* 저주의 숫자 3
 
  - 3x 마을 사람들은 3을 저주의 숫자라고 생각하기 때문에 3의 배수와 숫자 3을 사용하지 않습니다. 3x 마을 사람들의 숫자는 다음과 같습니다.
