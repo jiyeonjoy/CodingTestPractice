@@ -88,6 +88,10 @@ import Foundation
  재한사항
  s는 길이가 1 이상, 100이하인 스트링입니다.
 */
+func solution2(_ s:String) -> String {
+    return String(s[String.Index(encodedOffset: (s.count-1)/2)...String.Index(encodedOffset: s.count/2)])
+}
+
 func solution1(_ s:String) -> String {
     if s.count % 2 == 0 {
         return s[(s.count/2)-1..<(s.count/2)+1]
