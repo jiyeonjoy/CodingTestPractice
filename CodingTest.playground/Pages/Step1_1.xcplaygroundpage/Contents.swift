@@ -80,10 +80,35 @@ import Foundation
 
  -
 */
-/*
 
- -
+/* 가운데 글자 가져오기
+
+ - 단어 s의 가운데 글자를 반환하는 함수, solution을 만들어 보세요. 단어의 길이가 짝수라면 가운데 두글자를 반환하면 됩니다.
+ 
+ 재한사항
+ s는 길이가 1 이상, 100이하인 스트링입니다.
 */
+func solution1(_ s:String) -> String {
+    if s.count % 2 == 0 {
+        return s[(s.count/2)-1..<(s.count/2)+1]
+    } else {
+        return s[s.count/2..<(s.count/2)+1]
+    }
+}
+
+extension String {
+    subscript(_ range: CountableRange<Int>) -> String {
+        let start = index(startIndex, offsetBy: max(0, range.lowerBound))
+        let end = index(start, offsetBy: min(self.count - range.lowerBound,
+                                             range.upperBound - range.lowerBound))
+        return String(self[start..<end])
+    }
+
+    subscript(_ range: CountablePartialRangeFrom<Int>) -> String {
+        let start = index(startIndex, offsetBy: max(0, range.lowerBound))
+         return String(self[start...])
+    }
+}
 
 /* 2016년
 
