@@ -10,5 +10,6 @@
         <page name='Step1_1'/>
         <page name='Step1_2'/>
         <page name='Step1_3'/>
+        <page name='Step2_1'/>
     </pages>
 </playground>
