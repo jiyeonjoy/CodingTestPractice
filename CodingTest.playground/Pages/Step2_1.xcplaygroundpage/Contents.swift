@@ -50,10 +50,33 @@ import Foundation
  -
 */
 
-/*
+/* 행렬의 곱셈
 
- -
+ - 2차원 행렬 arr1과 arr2를 입력받아, arr1에 arr2를 곱한 결과를 반환하는 함수, solution을 완성해주세요.
+ 
+ 제한 조건
+ 행렬 arr1, arr2의 행과 열의 길이는 2 이상 100 이하입니다.
+ 행렬 arr1, arr2의 원소는 -10 이상 20 이하인 자연수입니다.
+ 곱할 수 있는 배열만 주어집니다.
 */
+func solution10(_ arr1:[[Int]], _ arr2:[[Int]]) -> [[Int]] {
+    var result: [[Int]] = []
+    for i in 0...arr1.count-1 {
+        var list:[Int] = []
+        for j in 0...arr2[0].count-1 {
+            var num:Int = 0
+            for k in 0...arr1[0].count-1 {
+                num += arr1[i][k]*arr2[k][j]
+            }
+            list.append(num)
+        }
+        result.append(list)
+    }
+    return result
+}
+
+solution10([[2, 3, 2], [4, 2, 4], [3, 1, 4]],[[5, 4, 3], [2, 4, 1], [3, 1, 1]])
+solution10([[1, 4], [3, 2], [4, 1]],[[3, 3], [3, 3]])
 
 /* 하노이의 탑
 
