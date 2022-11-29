@@ -79,7 +79,6 @@ import Foundation
  s에는 둘 이상의 정수가 공백으로 구분되어 있습니다.
 */
 func solution6(_ s:String) -> String {
-    var result:String = ""
     var list:[Int] = s.components(separatedBy: " ").map {
         Int($0) ?? 0
     }.sorted(by: <)
