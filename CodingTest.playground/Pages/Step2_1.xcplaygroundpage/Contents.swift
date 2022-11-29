@@ -55,10 +55,23 @@ import Foundation
  -
 */
 
-/*
+/* 하노이의 탑
 
- -
+ - 하노이 탑(Tower of Hanoi)은 퍼즐의 일종입니다. 세 개의 기둥과 이 기동에 꽂을 수 있는 크기가 다양한 원판들이 있고, 퍼즐을 시작하기 전에는 한 기둥에 원판들이 작은 것이 위에 있도록 순서대로 쌓여 있습니다. 게임의 목적은 다음 두 가지 조건을 만족시키면서, 한 기둥에 꽂힌 원판들을 그 순서 그대로 다른 기둥으로 옮겨서 다시 쌓는 것입니다.
+ 
+ 한 번에 하나의 원판만 옮길 수 있습니다.
+ 큰 원판이 작은 원판 위에 있어서는 안됩니다.
+ 하노이 탑의 세 개의 기둥을 왼쪽 부터 1번, 2번, 3번이라고 하겠습니다. 1번에는 n개의 원판이 있고 이 n개의 원판을 3번 원판으로 최소 횟수로 옮기려고 합니다.
+
+ 1번 기둥에 있는 원판의 개수 n이 매개변수로 주어질 때, n개의 원판을 3번 원판으로 최소로 옮기는 방법을 return하는 solution를 완성해주세요.
+
+ 제한사항
+ n은 15이하의 자연수 입니다.
 */
+// TODO
+func solution9(_ n:Int) -> [[Int]] {
+    return []
+}
 
 /* 피보나치 수
 
@@ -147,7 +160,7 @@ func solution6(_ s:String) -> String {
  제한 사항
  n은 1 이상, 2000 이하인 정수입니다.
 */
-///TODO
+// TODO
 var oneCount = 100
 var twoCount = 10
 var dd = (oneCount+1...oneCount+twoCount).reduce(1, *)
@@ -192,7 +205,7 @@ solution5(2000)
  열의 개수는 4개이고, 땅(land)은 2차원 배열로 주어집니다.
  점수 : 100 이하의 자연수
 */
-///TODO
+// TODO
 func solution4(_ land:[[Int]]) -> Int {
     var result = 0
     var index = -1
@@ -277,7 +290,7 @@ func solution2(_ s:String) -> Bool {
  표(board)의 열(column)의 크기 : 1,000 이하의 자연수
  표(board)의 값은 1또는 0으로만 이루어져 있습니다.
 */
-///TODO
+// TODO
 func solution1(_ board:[[Int]]) -> Int {
     var result:Int = board.count
     for i in board.count...0 {
