@@ -70,20 +70,98 @@ import Foundation
  -
 */
 
-/*
+/* 최댓값과 최솟값
 
- -
+ - 문자열 s에는 공백으로 구분된 숫자들이 저장되어 있습니다. str에 나타나는 숫자 중 최소값과 최대값을 찾아 이를 "(최소값) (최대값)"형태의 문자열을 반환하는 함수, solution을 완성하세요.
+ 예를들어 s가 "1 2 3 4"라면 "1 4"를 리턴하고, "-1 -2 -3 -4"라면 "-4 -1"을 리턴하면 됩니다.
+
+ 제한 조건
+ s에는 둘 이상의 정수가 공백으로 구분되어 있습니다.
 */
+func solution6(_ s:String) -> String {
+    var result:String = ""
+    var list:[Int] = s.components(separatedBy: " ").map {
+        Int($0) ?? 0
+    }.sorted(by: <)
+    let min:Int = list[0]
+    let max:Int = list[list.count-1]
+    return "\(min) \(max)"
+}
 
-/*
+/* 멀리 뛰기
 
- -
+ - 효진이는 멀리 뛰기를 연습하고 있습니다. 효진이는 한번에 1칸, 또는 2칸을 뛸 수 있습니다. 칸이 총 4개 있을 때, 효진이는
+ (1칸, 1칸, 1칸, 1칸)
+ (1칸, 2칸, 1칸)
+ (1칸, 1칸, 2칸)
+ (2칸, 1칸, 1칸)
+ (2칸, 2칸)
+ 의 5가지 방법으로 맨 끝 칸에 도달할 수 있습니다. 멀리뛰기에 사용될 칸의 수 n이 주어질 때, 효진이가 끝에 도달하는 방법이 몇 가지인지 알아내, 여기에 1234567를 나눈 나머지를 리턴하는 함수, solution을 완성하세요. 예를 들어 4가 입력된다면, 5를 return하면 됩니다.
+
+ 제한 사항
+ n은 1 이상, 2000 이하인 정수입니다.
 */
+///TODO
+var oneCount = 100
+var twoCount = 10
+var dd = (oneCount+1...oneCount+twoCount).reduce(1, *)
+dd
+func solution5(_ n:Int) -> Int {
+    var result: Int = 0
+    for i in 0...n/2 {
+        let oneCount = n - i*2
+        let twoCount = i
+        if twoCount == 0 || oneCount == 0 {
+            result += 1
+        } else if oneCount > twoCount {
+            (oneCount+1...oneCount+twoCount).reduce(1, *)/(1...twoCount).reduce(1, *)
+        } else {
+            (twoCount+1...oneCount+twoCount).reduce(1, *)/(1...oneCount).reduce(1, *)
+        }
+    }
+    
+    return result
+}
 
-/*
+solution5(2000)
 
- -
+/* 땅따먹기
+
+ - 땅따먹기 게임을 하려고 합니다. 땅따먹기 게임의 땅(land)은 총 N행 4열로 이루어져 있고, 모든 칸에는 점수가 쓰여 있습니다. 1행부터 땅을 밟으며 한 행씩 내려올 때, 각 행의 4칸 중 한 칸만 밟으면서 내려와야 합니다. 단, 땅따먹기 게임에는 한 행씩 내려올 때, 같은 열을 연속해서 밟을 수 없는 특수 규칙이 있습니다.
+ 
+ 예를 들면,
+
+ | 1 | 2 | 3 | 5 |
+
+ | 5 | 6 | 7 | 8 |
+
+ | 4 | 3 | 2 | 1 |
+
+ 로 땅이 주어졌다면, 1행에서 네번째 칸 (5)를 밟았으면, 2행의 네번째 칸 (8)은 밟을 수 없습니다.
+
+ 마지막 행까지 모두 내려왔을 때, 얻을 수 있는 점수의 최대값을 return하는 solution 함수를 완성해 주세요. 위 예의 경우, 1행의 네번째 칸 (5), 2행의 세번째 칸 (7), 3행의 첫번째 칸 (4) 땅을 밟아 16점이 최고점이 되므로 16을 return 하면 됩니다.
+
+ 제한사항
+ 행의 개수 N : 100,000 이하의 자연수
+ 열의 개수는 4개이고, 땅(land)은 2차원 배열로 주어집니다.
+ 점수 : 100 이하의 자연수
 */
+///TODO
+func solution4(_ land:[[Int]]) -> Int {
+    var result = 0
+    var index = -1
+    for i in land {
+        var max = i.sorted(by: >)[0]
+        if i.firstIndex(of: max) != index {
+            result += max
+            index = i.firstIndex(of: max)!
+        } else {
+            result += i.sorted(by: >)[1]
+            index = i.firstIndex(of: i.sorted(by: >)[1]) ?? 0
+        }
+    }
+    return result
+}
 
 /* 다음 큰 숫자
 
@@ -153,6 +231,7 @@ func solution2(_ s:String) -> Bool {
  표(board)의 열(column)의 크기 : 1,000 이하의 자연수
  표(board)의 값은 1또는 0으로만 이루어져 있습니다.
 */
+///TODO
 func solution1(_ board:[[Int]]) -> Int {
     var result:Int = board.count
     for i in board.count...0 {
