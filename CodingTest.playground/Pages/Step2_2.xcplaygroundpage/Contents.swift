@@ -20,15 +20,81 @@ import Foundation
  -
 */
 
-/*
+/* 기능개발
 
- -
+ - 프로그래머스 팀에서는 기능 개선 작업을 수행 중입니다. 각 기능은 진도가 100%일 때 서비스에 반영할 수 있습니다.
+ 
+ 또, 각 기능의 개발속도는 모두 다르기 때문에 뒤에 있는 기능이 앞에 있는 기능보다 먼저 개발될 수 있고, 이때 뒤에 있는 기능은 앞에 있는 기능이 배포될 때 함께 배포됩니다.
+
+ 먼저 배포되어야 하는 순서대로 작업의 진도가 적힌 정수 배열 progresses와 각 작업의 개발 속도가 적힌 정수 배열 speeds가 주어질 때 각 배포마다 몇 개의 기능이 배포되는지를 return 하도록 solution 함수를 완성하세요.
+
+ 제한 사항
+ 작업의 개수(progresses, speeds배열의 길이)는 100개 이하입니다.
+ 작업 진도는 100 미만의 자연수입니다.
+ 작업 속도는 100 이하의 자연수입니다.
+ 배포는 하루에 한 번만 할 수 있으며, 하루의 끝에 이루어진다고 가정합니다. 예를 들어 진도율이 95%인 작업의 개발 속도가 하루에 4%라면 배포는 2일 뒤에 이루어집니다.
 */
+func solution16(_ progresses:[Int], _ speeds:[Int]) -> [Int] {
+    var list:[Int] = []
+    for i in 0...progresses.count-1 {
+        list.append((100-progresses[i])/speeds[i] + ((100-progresses[i])%speeds[i] == 0 ? 0 : 1))
+    }
+    var result:[Int] = []
+    var count:Int = 0
+    var days:Int = list[0]
+    for i in 0...list.count-1 {
+        if list[i] <= days {
+            count += 1
+        } else {
+            result.append(count)
+            days = list[i]
+            count = 1
+        }
+    }
+    result.append(count)
+    return result
+}
 
-/*
+/* 다리를 지나는 트럭
 
- -
+ - 트럭 여러 대가 강을 가로지르는 일차선 다리를 정해진 순으로 건너려 합니다. 모든 트럭이 다리를 건너려면 최소 몇 초가 걸리는지 알아내야 합니다. 다리에는 트럭이 최대 bridge_length대 올라갈 수 있으며, 다리는 weight 이하까지의 무게를 견딜 수 있습니다. 단, 다리에 완전히 오르지 않은 트럭의 무게는 무시합니다.
+ 
+ 예를 들어, 트럭 2대가 올라갈 수 있고 무게를 10kg까지 견디는 다리가 있습니다. 무게가 [7, 4, 5, 6]kg인 트럭이 순서대로 최단 시간 안에 다리를 건너려면 다음과 같이 건너야 합니다.
+
+ 경과 시간    다리를 지난 트럭    다리를 건너는 트럭    대기 트럭
+ 0    []    []    [7,4,5,6]
+ 1~2    []    [7]    [4,5,6]
+ 3    [7]    [4]    [5,6]
+ 4    [7]    [4,5]    [6]
+ 5    [7,4]    [5]    [6]
+ 6~7    [7,4,5]    [6]    []
+ 8    [7,4,5,6]    []    []
+ 따라서, 모든 트럭이 다리를 지나려면 최소 8초가 걸립니다.
+
+ solution 함수의 매개변수로 다리에 올라갈 수 있는 트럭 수 bridge_length, 다리가 견딜 수 있는 무게 weight, 트럭 별 무게 truck_weights가 주어집니다. 이때 모든 트럭이 다리를 건너려면 최소 몇 초가 걸리는지 return 하도록 solution 함수를 완성하세요.
+
+ 제한 조건
+ bridge_length는 1 이상 10,000 이하입니다.
+ weight는 1 이상 10,000 이하입니다.
+ truck_weights의 길이는 1 이상 10,000 이하입니다.
+ 모든 트럭의 무게는 1 이상 weight 이하입니다.
 */
+// TODO
+func solution15(_ bridge_length:Int, _ weight:Int, _ truck_weights:[Int]) -> Int {
+    var trucksOnBridge:[Int] = []
+    var result:Int = 0
+    for truck in truck_weights {
+        if trucksOnBridge.reduce(0, +) < weight && trucksOnBridge.count < bridge_length {
+            trucksOnBridge.append(truck)
+            result += 1
+        } else {
+            trucksOnBridge.removeFirst()
+            result += bridge_length-trucksOnBridge.count
+            
+        }
+    }
+    return result
+}
 
 /* 위장
 
