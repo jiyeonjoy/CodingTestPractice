@@ -184,29 +184,22 @@ func solution6(_ s:String) -> String {
  제한 사항
  n은 1 이상, 2000 이하인 정수입니다.
 */
-// TODO
-//var oneCount = 100
-//var twoCount = 10
-//var dd = (oneCount+1...oneCount+twoCount).reduce(1, *)
-//dd
 func solution5(_ n:Int) -> Int {
-    var result: Int = 0
-    for i in 0...n/2 {
-        let oneCount = n - i*2
-        let twoCount = i
-        if twoCount == 0 || oneCount == 0 {
-            result += 1
-        } else if oneCount > twoCount {
-            (oneCount+1...oneCount+twoCount).reduce(1, *)/(1...twoCount).reduce(1, *)
-        } else {
-            (twoCount+1...oneCount+twoCount).reduce(1, *)/(1...oneCount).reduce(1, *)
-        }
+    if n < 4 {
+        return n
     }
-    
+    var a:Int = 1
+    var b:Int = 2
+    var result: Int = 0
+    for _ in 3...n {
+        result = (a+b)%1234567
+        a = b
+        b = result
+    }
     return result
 }
 
-//solution5(2000)
+solution5(1000)
 
 /* 땅따먹기
 

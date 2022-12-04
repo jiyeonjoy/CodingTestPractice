@@ -192,8 +192,180 @@ solution18(5, [[0,0],[0,-1],[2,-3],[3,-3]])
 
 /* 롤케이크 자르기
 
- -
+ - 철수는 롤케이크를 두 조각으로 잘라서 동생과 한 조각씩 나눠 먹으려고 합니다. 이 롤케이크에는 여러가지 토핑들이 일렬로 올려져 있습니다. 철수와 동생은 롤케이크를 공평하게 나눠먹으려 하는데, 그들은 롤케이크의 크기보다 롤케이크 위에 올려진 토핑들의 종류에 더 관심이 많습니다. 그래서 잘린 조각들의 크기와 올려진 토핑의 개수에 상관없이 각 조각에 동일한 가짓수의 토핑이 올라가면 공평하게 롤케이크가 나누어진 것으로 생각합니다.
+ 
+ 예를 들어, 롤케이크에 4가지 종류의 토핑이 올려져 있다고 합시다. 토핑들을 1, 2, 3, 4와 같이 번호로 표시했을 때, 케이크 위에 토핑들이 [1, 2, 1, 3, 1, 4, 1, 2] 순서로 올려져 있습니다. 만약 세 번째 토핑(1)과 네 번째 토핑(3) 사이를 자르면 롤케이크의 토핑은 [1, 2, 1], [3, 1, 4, 1, 2]로 나뉘게 됩니다. 철수가 [1, 2, 1]이 놓인 조각을, 동생이 [3, 1, 4, 1, 2]가 놓인 조각을 먹게 되면 철수는 두 가지 토핑(1, 2)을 맛볼 수 있지만, 동생은 네 가지 토핑(1, 2, 3, 4)을 맛볼 수 있으므로, 이는 공평하게 나누어진 것이 아닙니다. 만약 롤케이크의 네 번째 토핑(3)과 다섯 번째 토핑(1) 사이를 자르면 [1, 2, 1, 3], [1, 4, 1, 2]로 나뉘게 됩니다. 이 경우 철수는 세 가지 토핑(1, 2, 3)을, 동생도 세 가지 토핑(1, 2, 4)을 맛볼 수 있으므로, 이는 공평하게 나누어진 것입니다. 공평하게 롤케이크를 자르는 방법은 여러가지 일 수 있습니다. 위의 롤케이크를 [1, 2, 1, 3, 1], [4, 1, 2]으로 잘라도 공평하게 나뉩니다. 어떤 경우에는 롤케이크를 공평하게 나누지 못할 수도 있습니다.
+
+ 롤케이크에 올려진 토핑들의 번호를 저장한 정수 배열 topping이 매개변수로 주어질 때, 롤케이크를 공평하게 자르는 방법의 수를 return 하도록 solution 함수를 완성해주세요.
+
+ 제한사항
+ 1 ≤ topping의 길이 ≤ 1,000,000
+ 1 ≤ topping의 원소 ≤ 10,000
 */
+func solution176(_ topping:[Int]) -> Int {
+    var set0:Set<Int> = Set<Int>()
+    set0.formUnion(topping)
+    if set0.count == 1 {
+        return topping.count-1
+    }
+    var aList:[Int] = []
+    var bList:[Int] = []
+    var set1:Set<Int> = Set<Int>()
+    set1.formUnion(topping[0...set0.count/2-2])
+    var isMatch = false
+    var set2:Set<Int> = Set<Int>()
+    
+    var result:Int = 0
+    
+    for i in set0.count/2-1...topping.count-1-set0.count/2 {
+        if isMatch {
+            bList.removeFirst()
+            if aList.contains(topping[i]) && bList.contains(topping[i]) {
+                result += 1
+            } else {
+                break
+            }
+        } else {
+            set1.insert(topping[i])
+            if set1.count >= set0.count/2 {
+                set2.removeAll()
+                set2.formUnion(topping[i+1...topping.count-1])
+                if set1.count == set2.count {
+                    isMatch = true
+                    result += 1
+                    aList = Array(topping[0...i])
+                    bList = Array(topping[i+1...topping.count-1])
+                } else if set1.count > set2.count {
+                    break
+                }
+            }
+        }
+    }
+    return result
+}
+
+func solution175(_ topping:[Int]) -> Int {
+    var set0:Set<Int> = Set<Int>()
+    set0.formUnion(topping)
+    
+    var result:Int = 0
+    var set1:Set<Int> = Set<Int>()
+    set1.formUnion(topping[0...set0.count/2-1])
+    var set2:Set<Int> = Set<Int>()
+    var isMatch = false
+    for i in set0.count/2-1...topping.count-1-set0.count/2 {
+        if isMatch {
+            if set1.contains(topping[i]) {
+                result += 1
+            } else {
+                break
+            }
+        } else {
+            set1.insert(topping[i])
+            if set1.count >= set0.count/2 {
+                set2.removeAll()
+                set2.formUnion(topping[i+1...topping.count-1])
+                if set1.count == set2.count {
+                    result += 1
+                    isMatch = true
+                } else if set1.count > set2.count {
+                    break
+                }
+            }
+        }
+        
+    }
+    return isMatch ? result : 0
+}
+
+func solution174(_ topping:[Int]) -> Int {
+    var set0:Set<Int> = Set<Int>()
+    set0.formUnion(topping)
+    
+    var result:Int = 0
+    var set1:Set<Int> = Set<Int>()
+    set1.formUnion(topping[0...set0.count/2-1])
+    
+    var isMatch = false
+    for i in set0.count/2-1...topping.count-1-set0.count/2 {
+        if isMatch {
+            if set1.contains(topping[i]) {
+                result += 1
+            } else {
+                break
+            }
+        } else {
+            set1.insert(topping[i])
+            if set1.count >= set0.count/2 {
+                var set2:Set<Int> = Set<Int>()
+                set2.formUnion(topping[i+1...topping.count-1])
+                if set1.count == set2.count {
+                    result += 1
+                    isMatch = true
+                }
+            }
+        }
+        
+    }
+    return result
+}
+
+func solution173(_ topping:[Int]) -> Int {
+    var dic = Dictionary(grouping: topping) { $0 }
+    var result:Int = 0
+    var set1:Set<Int> = Set<Int>()
+    set1.formUnion(topping[0...dic.count/2-1])
+    var set2:Set<Int> = Set<Int>()
+    for i in dic.count/2-1...topping.count-1-dic.count/2 {
+        set1.insert(topping[i])
+        if set1.count >= dic.count/2 {
+            set2.removeAll()
+            set2.formUnion(topping[i+1...topping.count-1])
+            if set1.count == set2.count {
+                result += 1
+            } else if set1.count > set2.count {
+                break
+            }
+        }
+    }
+    return result
+}
+
+func solution172(_ topping:[Int]) -> Int {
+    var dic = Dictionary(grouping: topping) { $0 }
+    var result:Int = 0
+    for i in dic.count/2-1...topping.count-1-dic.count/2 {
+        var set1:Set<Int> = Set<Int>()
+        set1.formUnion(topping[0...i])
+        var set2:Set<Int> = Set<Int>()
+        set2.formUnion(topping[i+1...topping.count-1])
+        if set1.count == set2.count {
+            result += 1
+        } else if set1.count > dic.count/2 {
+            break
+        }
+    }
+    return result
+}
+
+func solution171(_ topping:[Int]) -> Int {
+    var result:Int = 0
+    var set1:Set<Int> = Set<Int>()
+    set1.insert(topping[0])
+    for i in 1...topping.count-2 {
+        set1.insert(topping[i])
+        var set2:Set<Int> = Set<Int>()
+        set2.formUnion(topping[i+1...topping.count-1])
+        if set1.count == set2.count {
+            result += 1
+        } else if set1.count > set2.count {
+            break
+        }
+    }
+    return result
+}
+
+//solution17([1, 2, 1, 3, 1, 4, 1, 2])
 
 /* 택배상자
 
