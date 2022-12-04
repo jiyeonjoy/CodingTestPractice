@@ -40,8 +40,71 @@ func solution20(_ rows:Int, _ columns:Int, _ queries:[[Int]]) -> [Int] {
  s의 길이는 1 이상 1,000 이하입니다.
 */
 func solution19(_ s:String) -> Int {
-    return -1
+    if s.count == 1 {
+        return 0
+    }
+    var result:Int = 0
+    var charList = Array(s)
+    for _ in 0...s.count-1 {
+        charList.append(charList.first!)
+        charList.removeFirst()
+        
+        var list:[Character] = []
+        var isMatch = true
+        
+        for char in charList {
+            if char == "[" || char == "{" || char == "("{
+                list.append(char)
+            } else if char == "]" {
+                if list.contains("[") {
+                    let index = list.lastIndex(of: "[")!
+                    if (list.lastIndex(of: "{") ?? 0) > index
+                        || (list.lastIndex(of: "(") ?? 0) > index {
+                        isMatch = false
+                        break
+                    }
+                    list.remove(at: index)
+                } else {
+                    isMatch = false
+                    break
+                }
+            } else if char == "}" {
+                if list.contains("{") {
+                    let index = list.lastIndex(of: "{")!
+                    if (list.lastIndex(of: "[") ?? 0) > index
+                        || (list.lastIndex(of: "(") ?? 0) > index {
+                        isMatch = false
+                        break
+                    }
+                    list.remove(at: index)
+                } else {
+                    isMatch = false
+                    break
+                }
+            } else if char == ")" {
+                if list.contains("(") {
+                    let index = list.lastIndex(of: "(")!
+                    if (list.lastIndex(of: "[") ?? 0) > index
+                        || (list.lastIndex(of: "{") ?? 0) > index {
+                        isMatch = false
+                        break
+                    }
+                    list.remove(at: index)
+                } else {
+                    isMatch = false
+                    break
+                }
+            }
+        }
+        if list.count == 0 && isMatch {
+            result += 1
+        }
+    }
+    return result
 }
+
+solution19("[{]}")
+solution19("[](){}")
 
 /* 순위 검색
 
