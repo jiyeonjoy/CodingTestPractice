@@ -509,10 +509,47 @@ func solution8(_ m:Int, _ n:Int, _ board:[String]) -> Int {
  출력 형식
  입력으로 들어온 두 문자열의 자카드 유사도를 출력한다. 유사도 값은 0에서 1 사이의 실수이므로, 이를 다루기 쉽도록 65536을 곱한 후에 소수점 아래를 버리고 정수부만 출력한다.
 */
-// TODO
 func solution7(_ str1:String, _ str2:String) -> Int {
-    return 0
+    if str1 == "" && str2 == "" {
+        return 65536
+    }
+    var s1:[Character] = Array(str1.lowercased())
+    var s2:[Character] = Array(str2.lowercased())
+    var list1:[String] = []
+    var list2:[String] = []
+    for i in 0...s1.count-2 {
+        if (s1[i].asciiValue ?? 0) > 96 && (s1[i].asciiValue ?? 0) < 123 &&
+            (s1[i+1].asciiValue ?? 0) > 96 && (s1[i+1].asciiValue ?? 0) < 123 {
+            list1.append(String(s1[i...i+1]))
+        }
+    }
+    for i in 0...s2.count-2 {
+        if (s2[i].asciiValue ?? 0) > 96 && (s2[i].asciiValue ?? 0) < 123 &&
+            (s2[i+1].asciiValue ?? 0) > 96 && (s2[i+1].asciiValue ?? 0) < 123 {
+            list2.append(String(s2[i...i+1]))
+        }
+    }
+    var list4 = list2
+    var list3 = list1.filter {
+        if list4.contains($0) {
+            list4.remove(at: list4.firstIndex(of: $0)!)
+            return true
+        } else {
+            return false
+        }
+    }
+    if (list1.count+list2.count-list3.count == 0) {
+        return 65536
+    }
+    var result:Int = 65536*(list3.count)/(list1.count+list2.count-list3.count)
+    return result
 }
+
+solution7("di mi mi mi mi","di di di go")
+solution7("E=M*C^2","e=m*c^2")
+solution7("FRANCE","french")
+solution7("handshake", "shake hands") // 65536
+solution7("aa1+aa2", "AAAA12") // 43690
 
 /* 예상 대진표
 
