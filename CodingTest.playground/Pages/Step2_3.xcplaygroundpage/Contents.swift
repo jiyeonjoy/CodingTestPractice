@@ -331,8 +331,26 @@ func solution13(_ expression:String) -> Int64 {
  return 하는 배열의 길이가 1 이상 500 이하인 경우만 입력으로 주어집니다.
 */
 func solution12(_ s:String) -> [Int] {
-    return []
+    var str = s
+    str.removeFirst()
+    str.removeFirst()
+    str.removeLast()
+    str.removeLast()
+    var tuples:[[Int]] = str.components(separatedBy: "},{").map {
+        $0.components(separatedBy: ",").map {
+            Int($0) ?? 0
+        }
+    }.sorted { $0.count < $1.count }
+    
+    var result:[Int] = []
+    for tuple in tuples {
+        var tupleFilter = tuple.filter { !result.contains($0) }
+        result.append(tupleFilter[0])
+    }
+    return result
 }
+
+solution12("{{2},{2,1},{2,1,3},{2,1,3,4}}")
 
 /* 멀쩡한 사각형
 
