@@ -415,10 +415,31 @@ func solution10(_ m:String, _ musicinfos:[String]) -> String {
  cache hit일 경우 실행시간은 1이다.
  cache miss일 경우 실행시간은 5이다.
 */
-// TODO
 func solution9(_ cacheSize:Int, _ cities:[String]) -> Int {
-    return 0
+    if cacheSize == 0 {
+        return cities.count*5
+    }
+    var cacheList:[String] = []
+    var result:Int = 0
+    for city in cities {
+        if cacheList.contains(city.lowercased()) {
+            result += 1
+            cacheList.remove(at: cacheList.firstIndex(of: city.lowercased())!)
+            cacheList.append(city.lowercased())
+        } else {
+            result += 5
+            if cacheList.count < cacheSize {
+                cacheList.append(city.lowercased())
+            } else {
+                cacheList.append(city.lowercased())
+                cacheList.removeFirst()
+            }
+        }
+    }
+    return result
 }
+
+solution9(2, ["Jeju", "Pangyo", "NewYork", "newyork"]) // 16
 
 /* [1차] 프렌즈4블록
 
