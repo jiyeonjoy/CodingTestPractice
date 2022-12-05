@@ -540,16 +540,50 @@ func solution7(_ skill:String, _ skill_trees:[String]) -> Int {
  각 숫자는 1 이상 50 이하인 자연수입니다.
  타겟 넘버는 1 이상 1000 이하인 자연수입니다.
 */
-// TODO
-func solution6(_ numbers:[Int], _ target:Int) -> Int {
-    var value = (numbers.reduce(0, +)-target)/2
-    var result:Int = 0
-    
-    for i in 0...numbers.count-2 {
-        
+
+func combinations<T>(source: [T], takenBy : Int) -> [[T]] {
+    if(source.count == takenBy) {
+        return [source]
     }
+
+    if(source.isEmpty) {
+        return []
+    }
+
+    if(takenBy == 0) {
+        return []
+    }
+
+    if(takenBy == 1) {
+        return source.map { [$0] }
+    }
+
+    var result : [[T]] = []
+
+    let rest = Array(source.suffix(from: 1))
+    let subCombos = combinations(source: rest, takenBy: takenBy - 1)
+    result += subCombos.map { [source[0]] + $0 }
+    result += combinations(source: rest, takenBy: takenBy)
     return result
 }
+
+func allCombos<T>(elements: Array<T>) -> [[T]] {
+    var answer: [[T]] = []
+    for i in 1...elements.count {
+        answer.append(contentsOf: combinations(source: elements, takenBy: i))
+    }
+    return answer
+}
+
+func solution6(_ numbers:[Int], _ target:Int) -> Int {
+    var value = (numbers.reduce(0, +)-target)/2
+    var list:[[Int]] = allCombos(elements: numbers).filter {
+        $0.reduce(0,+) == value
+    }
+    return list.count
+}
+
+solution6([4, 1, 2, 1], 4)
 
 /* 후보키
 
