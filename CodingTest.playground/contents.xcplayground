@@ -14,5 +14,8 @@
         <page name='Step2_2'/>
         <page name='Step2_3'/>
         <page name='Step2_4'/>
+        <page name='Factorial'/>
+        <page name='Permutations'/>
+        <page name='Combinations'/>
     </pages>
 </playground>
