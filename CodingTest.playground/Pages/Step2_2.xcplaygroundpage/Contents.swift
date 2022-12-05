@@ -360,10 +360,38 @@ func solution12(_ files:[String]) -> [String] {
  출력 형식
  주어진 문자열을 압축한 후의 사전 색인 번호를 배열로 출력하라.
 */
-// TODO
 func solution11(_ msg:String) -> [Int] {
-    return []
+    var dictionary:[String] = ["A","B","C","D","E","F","G","H","I","J","K","L","M","N","O","P","Q","R","S","T","U","V","W","X","Y","Z"]
+    var result:[Int] = []
+    var jumpIndex = -1
+    var lastStr:String = ""
+    for i in 0...msg.count-1 {
+        if i <= jumpIndex {
+            continue
+        }
+        for j in 0...msg.count-1-i {
+            if !dictionary.contains(String(Array(msg)[i...i+j])) {
+                result.append(dictionary.firstIndex(of: String(Array(msg)[i...i+j-1]))!+1)
+                dictionary.append(String(Array(msg)[i...i+j]))
+                jumpIndex = i+j-1
+                break
+            } else {
+                if i+j == msg.count-1 {
+                    lastStr = String(Array(msg)[i...i+j])
+                    jumpIndex = i+j
+                    break
+                }
+            }
+        }
+    }
+    if lastStr != "" {
+        result.append(dictionary.firstIndex(of: lastStr)!+1)
+    }
+    return result
 }
+
+solution11("TOBEORNOTTOBEORTOBEORNOT")
+solution11("KAKAO")
 
 /* [3차] 방금그곡
 
