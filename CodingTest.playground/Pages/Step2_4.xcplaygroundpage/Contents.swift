@@ -587,25 +587,39 @@ solution9(437674, 3) // 3
  "최소 필요 피로도"와 "소모 피로도"는 1 이상 1,000 이하인 자연수입니다.
  서로 다른 던전의 ["최소 필요 피로도", "소모 피로도"]가 서로 같을 수 있습니다.
 */
+
+func permute<C: Collection>(items: C) -> [[C.Iterator.Element]] {
+    var scratch = Array(items)
+    var result: [[C.Iterator.Element]] = []
+    func heap(_ n: Int) {
+        if n == 1 {
+            result.append(scratch)
+            return
+        }
+
+        for i in 0..<n-1 {
+            heap(n-1)
+            let j = (n%2 == 1) ? 0 : i
+            scratch.swapAt(j, n-1)
+        }
+        heap(n-1)
+    }
+    heap(scratch.count)
+    return result
+}
+
 func solution8(_ k:Int, _ dungeons:[[Int]]) -> Int {
     var result:Int = 0
-    var p = k
-    dungeons.sorted {
-        if $0.first == k {
-            return true
-        } else if $1.first == k {
-            return false
-        } else if $0.first == $1.first {
-            return $0.last! < $1.last!
-        } else {
-            return $0.last! < $1.last!
+    permute(items: dungeons).map {
+        var kValue = k
+        var count = 0
+        for dungeon in $0 {
+            if dungeon[0] <= kValue{
+                kValue -= dungeon[1]
+                count += 1
+            }
         }
-    }.map {
-        print($0)
-        if p >= $0[0] {
-            p -= $0[1]
-            result += 1
-        }
+        result = max(result, count)
     }
     return result
 }
