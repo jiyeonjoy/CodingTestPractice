@@ -459,9 +459,30 @@ func solution13(_ want:[String], _ number:[Int], _ discount:[String]) -> Int {
  1 ≤ n ≤ 1,000,000
  3 ≤ k ≤ 10
 */
-func solution9(_ n:Int, _ k:Int) -> Int {
-    return -1
+func isPrime(num: Int) -> Bool {
+    if(num<4) {
+        return num == 1 ? false : true
+    }
+    for i in 2...Int(sqrt(Double(num))) {
+        if(num % i == 0) { return false }
+    }
+    return true
 }
+
+func solution9(_ n:Int, _ k:Int) -> Int {
+    if k == 10 {
+        return String(n).components(separatedBy: "0").filter {
+            isPrime(num: Int($0) ?? 1)
+        }.count
+    } else {
+        return String(n, radix: k).components(separatedBy: "0").filter {
+            isPrime(num: Int($0) ?? 1)
+        }.count
+    }
+}
+
+solution9(110011, 10) // 2
+solution9(437674, 3) // 3
 
 /* 피로도
 
