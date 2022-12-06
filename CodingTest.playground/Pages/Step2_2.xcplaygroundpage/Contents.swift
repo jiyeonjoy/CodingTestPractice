@@ -256,10 +256,26 @@ solution14([["yellow_hat", "headgear"], ["blue_sunglasses", "eyewear"], ["green_
  출력 형식
  튜브가 말해야 하는 숫자 t개를 공백 없이 차례대로 나타낸 문자열. 단, 10~15는 각각 대문자 A~F로 출력한다.
 */
-// TODO
 func solution13(_ n:Int, _ t:Int, _ m:Int, _ p:Int) -> String {
-    return ""
+    var list:[Character] = Array(["0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "A", "B", "C", "D", "E", "F"][0...n-1])
+    var str:String = String(list)
+    var i:Int = 1
+    var j:Int = 0
+    var result:[Character] = []
+    while j < t {
+        str += list.map { "\(String(i, radix: n).uppercased())\($0)" }.joined()
+        i += 1
+        if p-1+j*m < str.count {
+            result.append(Array(str)[p-1+j*m])
+            j += 1
+        }
+    }
+    return String(result)
 }
+
+solution13(2, 4, 2, 1) // "0111"
+solution13(16, 16, 2, 1) // "02468ACE11111111"
+solution13(16, 1000, 100, 100)
 
 /* [3차] 파일명 정렬
 
