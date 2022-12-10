@@ -1069,7 +1069,7 @@ func solution1(_ numbers:[Int64]) -> [Int64] {
     return result
 }
 
-solution11([2,7]) // [3, 11]
+solution1([2,7]) // [3, 11]
 
 func solution0(_ numbers:[Int64]) -> [Int64] {
     var result:[Int64] = []
