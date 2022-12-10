@@ -11,10 +11,94 @@ import Foundation
  numbers는 0~9까지 숫자만으로 이루어져 있습니다.
  "013"은 0, 1, 3 숫자가 적힌 종이 조각이 흩어져있다는 의미입니다.
 */
-// TODO
-func solution20(_ numbers:String) -> Int {
-    return 0
+func combinations<T>(source: [T], takenBy : Int) -> [[T]] {
+    if(source.count == takenBy) {
+        return [source]
+    }
+
+    if(source.isEmpty) {
+        return []
+    }
+
+    if(takenBy == 0) {
+        return []
+    }
+
+    if(takenBy == 1) {
+        return source.map { [$0] }
+    }
+
+    var result : [[T]] = []
+
+    let rest = Array(source.suffix(from: 1))
+    let subCombos = combinations(source: rest, takenBy: takenBy - 1)
+    result += subCombos.map { [source[0]] + $0 }
+    result += combinations(source: rest, takenBy: takenBy)
+    return result
 }
+
+func allCombos<T>(elements: Array<T>) -> [[T]] {
+    var answer: [[T]] = []
+    for i in 1...elements.count {
+        answer.append(contentsOf: combinations(source: elements, takenBy: i))
+    }
+    return answer
+}
+
+func permute<C: Collection>(items: C) -> [[C.Iterator.Element]] {
+    var scratch = Array(items) // This is a scratch space for Heap's algorithm
+    var result: [[C.Iterator.Element]] = [] // This will accumulate our result
+    func heap(_ n: Int) {
+        if n == 1 {
+            result.append(scratch)
+            return
+        }
+
+        for i in 0..<n-1 {
+            heap(n-1)
+            let j = (n%2 == 1) ? 0 : i
+            scratch.swapAt(j, n-1)
+        }
+        heap(n-1)
+    }
+    heap(scratch.count)
+    return result
+}
+
+
+func isPrime(num: Int) -> Bool {
+    if(num<4) {
+        return num == 1 ? false : true
+    }
+    for i in 2...Int(sqrt(Double(num))) {
+        if(num % i == 0) { return false }
+    }
+    return true
+}
+
+func solution20(_ numbers:String) -> Int {
+    var set = Set<Int>()
+    for data in allCombos(elements: Array(numbers)) {
+        if data.count == 1 {
+            set.insert(Int(String(data[0])) ?? 0)
+        } else {
+            var list = permute(items: data)
+            for p in list {
+                set.insert(Int(String(p)) ?? 0)
+            }
+        }
+    }
+    var result:Int = 0
+    for s in set {
+        if s > 1 && isPrime(num: s) {
+            result += 1
+        }
+    }
+    return result
+}
+
+solution20("011") // 2
+solution20("17")
 
 /* H-Index
 
