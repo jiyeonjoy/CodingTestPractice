@@ -516,8 +516,25 @@ func solution14(_ cards:[Int]) -> Int {
  1 ≤ want의 원소의 길이, discount의 원소의 길이 ≤ 12
 */
 func solution13(_ want:[String], _ number:[Int], _ discount:[String]) -> Int {
-    return 0
+    var result:Int = 0
+    for i in 0...discount.count-number.reduce(0,+) {
+        var countList = number
+        for j in 0...9 {
+            if want.contains(discount[i+j]) {
+                let index:Int = want.firstIndex(of: discount[i+j]) ?? 0
+                if countList[index] > 0 {
+                    countList[index] = countList[index]-1
+                }
+            }
+        }
+        if countList.reduce(0, +) == 0 {
+            result += 1
+        }
+    }
+    return result
 }
+
+solution13(["banana", "apple", "rice", "pork", "pot"], [3, 2, 2, 2, 1], ["chicken", "apple", "apple", "banana", "rice", "apple", "pork", "banana", "pork", "rice", "pot", "banana", "apple", "banana"])
 
 /* 두 큐 합 같게 만들기
 
