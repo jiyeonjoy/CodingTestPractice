@@ -181,22 +181,34 @@ func solution16(_ progresses:[Int], _ speeds:[Int]) -> [Int] {
  truck_weights의 길이는 1 이상 10,000 이하입니다.
  모든 트럭의 무게는 1 이상 weight 이하입니다.
 */
-// TODO
 func solution15(_ bridge_length:Int, _ weight:Int, _ truck_weights:[Int]) -> Int {
     var trucksOnBridge:[Int] = []
+    for _ in 1...bridge_length {
+        trucksOnBridge.append(0)
+    }
     var result:Int = 0
-    for truck in truck_weights {
-        if trucksOnBridge.reduce(0, +) < weight && trucksOnBridge.count < bridge_length {
-            trucksOnBridge.append(truck)
-            result += 1
+    var index:Int = 0
+    var sum:Int = 0
+    while true {
+        sum -= trucksOnBridge[0]
+        trucksOnBridge.remove(at: 0)
+        if sum+truck_weights[index] <= weight {
+            sum += truck_weights[index]
+            trucksOnBridge.append(truck_weights[index])
+            index += 1
+            if index == truck_weights.count {
+                result += bridge_length+1
+                break
+            }
         } else {
-            trucksOnBridge.removeFirst()
-            result += bridge_length-trucksOnBridge.count
-            
+            trucksOnBridge.append(0)
         }
+        result += 1
     }
     return result
 }
+
+solution15(2, 10, [7,4,5,6]) // 8
 
 /* 위장
 
