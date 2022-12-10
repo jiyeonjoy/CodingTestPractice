@@ -222,22 +222,40 @@ solution5(1000)
  열의 개수는 4개이고, 땅(land)은 2차원 배열로 주어집니다.
  점수 : 100 이하의 자연수
 */
-// TODO
-func solution4(_ land:[[Int]]) -> Int {
-    var result = 0
-    var index = -1
-    for i in land {
-        var max = i.sorted(by: >)[0]
-        if i.firstIndex(of: max) != index {
-            result += max
-            index = i.firstIndex(of: max)!
+func getMax(_ list:[Int], _ exceptIndex:Int) -> Int {
+    var newList:[Int] = list
+    newList[exceptIndex] = 0
+    let max:Int = newList.max() ?? 0
+    return max
+}
+
+func getMaxList(_ maxList:[Int], _ list:[Int]) -> [Int] {
+    var newMaxList:[Int] = []
+    let maxValue:Int = maxList.max() ?? 0
+    let index:Int = maxList.firstIndex(of: maxValue) ?? 0
+    for i in 0...maxList.count-1 {
+        if i != index {
+            newMaxList.append(list[i] + maxValue)
         } else {
-            result += i.sorted(by: >)[1]
-            index = i.firstIndex(of: i.sorted(by: >)[1]) ?? 0
+            newMaxList.append(list[i] + getMax(maxList, i))
         }
     }
-    return result
+    return newMaxList
 }
+
+func solution4(_ land:[[Int]]) -> Int {
+    var maxList:[Int] = []
+    for i in land {
+        if maxList.isEmpty {
+            maxList = i
+        } else {
+            maxList = getMaxList(maxList, i)
+        }
+    }
+    return maxList.max() ?? 0
+}
+
+solution4([[1,2,3,5],[5,6,7,8],[4,3,2,1]]) // 16
 
 /* 다음 큰 숫자
 
