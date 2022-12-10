@@ -883,7 +883,7 @@ func solution6(_ line:[[Int]]) -> [String] {
 }
 
 //solution6([[0, 1, -1], [1, 0, -1], [1, 0, 1]])
-solution6([[2, -1, 4], [-2, -1, 4], [0, -1, 1], [5, -8, -12], [5, 8, 12]])
+//solution6([[2, -1, 4], [-2, -1, 4], [0, -1, 1], [5, -8, -12], [5, 8, 12]])
 // ["....*....", ".........", ".........", "*.......*", ".........", ".........", ".........", ".........", "*.......*"]
 
 /* 전력망을 둘로 나누기
@@ -926,7 +926,7 @@ func solution5(_ n:Int, _ wires:[[Int]]) -> Int {
     return result
 }
 
-solution5(9, [[1, 3], [2, 3], [3, 4], [4, 5], [4, 6], [4, 7], [7, 8], [7, 9]])
+//solution5(9, [[1, 3], [2, 3], [3, 4], [4, 5], [4, 6], [4, 7], [7, 8], [7, 9]])
 
 /* 빛의 경로 사이클
 
@@ -988,9 +988,9 @@ func solution3(_ word:String) -> Int {
     return result
 }
 
-solution3("I")
-solution3("EIO")
-solution3("AAAAE")
+//solution3("I")
+//solution3("EIO")
+//solution3("AAAAE")
 
 /* 거리두기 확인하기
 
@@ -1047,7 +1047,44 @@ func solution2(_ places:[[String]]) -> [Int] {
  1 ≤ numbers의 길이 ≤ 100,000
  0 ≤ numbers의 모든 수 ≤ 1015
 */
-// TODO
 func solution1(_ numbers:[Int64]) -> [Int64] {
-    return []
+    var result:[Int64] = []
+    var saveData:[Int64:Int64] = [:]
+    for number in numbers {
+        if saveData[number] != nil {
+            result.append(saveData[number]!)
+        } else {
+            var i:Int64 = 1
+            while true {
+                let outputBits = String(number^(number+i), radix: 2).filter{ $0 == Character("1") }
+                if outputBits.count < 3 {
+                    result.append(number+i)
+                    saveData[number] = number+i
+                    break
+                }
+                i += Int64(pow(2.0, Double(outputBits.count-2)))-1
+            }
+        }
+    }
+    return result
 }
+
+solution11([2,7]) // [3, 11]
+
+func solution0(_ numbers:[Int64]) -> [Int64] {
+    var result:[Int64] = []
+    for number in numbers {
+        var i:Int64 = 1
+        while true {
+            let outputBits = String(number^(number+i), radix: 2).filter{ $0 == Character("1") }
+            if outputBits.count < 3 {
+                result.append(number+i)
+                break
+            }
+            i += 1
+        }
+    }
+    return result
+}
+
+solution0([2,7]) // [3, 11]
