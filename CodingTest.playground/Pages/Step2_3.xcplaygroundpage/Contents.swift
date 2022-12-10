@@ -246,9 +246,89 @@ func solution16(_ s:String) -> [Int] {
  arr의 각 행의 길이는 arr의 행의 개수와 같습니다. 즉, arr은 정사각형 배열입니다.
  arr의 각 행에 있는 모든 값은 0 또는 1 입니다.
 */
-func solution15(_ arr:[[Int]]) -> [Int] {
-    return []
+func getQuartered(_ arr:[[Int]]) -> [[[Int]]] {
+    var result:[[[Int]]] = []
+    var width:Int = arr.count/2
+    result.append(arr[0...width-1].map {
+        Array($0[0...width-1])
+    })
+    result.append(arr[0...width-1].map {
+        Array($0[width...arr.count-1])
+    })
+    result.append(arr[width...arr.count-1].map {
+        Array($0[0...width-1])
+    })
+    result.append(arr[width...arr.count-1].map {
+        Array($0[width...arr.count-1])
+    })
+    return result
 }
+
+func checkValue(_ arr:[[Int]]) -> Int {
+    var sum: Int = arr[0].reduce(0, +)
+    if sum == 0 {
+        for i in 1...arr.count-1 {
+            if arr[i].reduce(0,+) != sum {
+                return -1
+            }
+        }
+        return 0
+    } else if sum == arr[0].count {
+        for i in 1...arr.count-1 {
+            if arr[i].reduce(0,+) != sum {
+                return -1
+            }
+        }
+        return 1
+    } else {
+        return -1
+    }
+}
+
+func solution15(_ arr:[[Int]]) -> [Int] {
+    if checkValue(arr) == 0 {
+        return [1, 0]
+    } else if checkValue(arr) == 1 {
+        return [0, 1]
+    }
+    
+    var newArr = [arr]
+    var width = arr.count
+
+    var zeroCount:Int = 0
+    var oneCount:Int = 0
+    while width > 2 {
+        width /= 2
+        var list = newArr
+        newArr = []
+        for a in list {
+            for b in getQuartered(a) {
+                let value = checkValue(b)
+                if value == 0 {
+                    zeroCount += 1
+                } else if value == 1 {
+                    oneCount += 1
+                } else {
+                    newArr.append(b)
+                }
+            }
+        }
+    }
+    for i in newArr {
+        for j in i {
+            for k in j {
+                if k == 0 {
+                    zeroCount += 1
+                } else {
+                    oneCount += 1
+                }
+            }
+        }
+    }
+    return [zeroCount, oneCount]
+}
+
+solution15([[1,1,0,0],[1,0,0,0],[1,0,0,1],[1,1,1,1]]) // [4,9]
 
 /* 삼각 달팽이
 
