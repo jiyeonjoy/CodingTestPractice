@@ -315,10 +315,46 @@ solution13(16, 1000, 100, 100)
  출력 형식
  위 기준에 따라 정렬된 배열을 출력한다.
 */
-// TODO
 func solution12(_ files:[String]) -> [String] {
-    return []
+    var dic:[String:[String]] = Dictionary(grouping: files) {
+        $0.components(separatedBy: ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9"])[0].lowercased()
+    }
+    var result:[String] = []
+    for key in dic.keys.sorted(by: <) {
+        if dic[key]!.count == 1 {
+            result.append(dic[key]![0])
+        } else {
+            var list:[String] = dic[key]!.sorted {
+                var str1:String = ""
+                var str2:String = ""
+                for i in key.count...$0.count-1 {
+                    if Array($0)[i].isNumber {
+                        str1 += String(Array($0)[i])
+                    } else {
+                        break
+                    }
+                }
+                for i in key.count...$1.count-1 {
+                    if Array($1)[i].isNumber {
+                        str2 += String(Array($1)[i])
+                    } else {
+                        break
+                    }
+                }
+                return Int(str1) ?? 0 < Int(str2) ?? 0
+            }
+            for s in list {
+                result.append(s)
+            }
+        }
+    }
+    return result
 }
+
+solution12(["img12.png", "img10.png", "img02.png", "img1.png", "IMG01.GIF", "img2.JPG"])
+// ["img1.png", "IMG01.GIF", "img02.png", "img2.JPG", "img10.png", "img12.png"]
+solution12(["F-5 Freedom Fighter", "B-50 Superfortress", "A-10 Thunderbolt II", "F-14 Tomcat"])
+
 
 /* [3차] 압축
 
@@ -516,10 +552,34 @@ solution9(2, ["Jeju", "Pangyo", "NewYork", "newyork"]) // 16
  출력 형식
  입력으로 주어진 판 정보를 가지고 몇 개의 블록이 지워질지 출력하라.
 */
-// TODO
-func solution8(_ m:Int, _ n:Int, _ board:[String]) -> Int {
-    return 0
+func findB(_ board:[String]) -> [String] {
+    var b:[String] = board
+    if b.count > 1 {
+        for i in 0...b.count-2 {
+            if b[i].count > 1 {
+                for j in 0...b[i].count-2 {
+                    var charList = Array(b[i])
+                    var charList2 = Array(b[i+1])
+                    if charList[j] == charList[j+1] && charList[j] == charList2[j] && charList[j] == charList2[j+1] {
+                        
+                    }
+                }
+            }
+        }
+    }
+    return []
 }
+
+func solution8(_ m:Int, _ n:Int, _ board:[String]) -> Int {
+    var b:[String] = board
+    var result:Int = 0
+    
+    findB(b)
+    
+    return result
+}
+
+solution8(4, 5, ["CCBDE", "AAADE", "AAABF", "CCBBF"]) // 14
 
 /* [1차] 뉴스 클러스터링
 
