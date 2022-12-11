@@ -325,10 +325,390 @@ func solution2(_ s:String) -> Bool {
  표(board)의 열(column)의 크기 : 1,000 이하의 자연수
  표(board)의 값은 1또는 0으로만 이루어져 있습니다.
 */
-func solution111111(_ board:[[Int]]) -> Int {
-    if board.count == 0 {
-        return 0
+func solution111111111111(_ board:[[Int]]) -> Int {
+    var max:Int = 0
+    var zeroList:[[Int]] = []
+    for i in 0...board.count-1 {
+        if i+max < board.count {
+            var jumpIndex = -1
+            for j in 0...board[0].count-1 {
+                if j+max < board[0].count {
+                    if board[i][j] == 1 && j > jumpIndex && zeroList.filter({ $0[0] >= i && $0[0] <= i+max && $0[1] >= j && $0[1] <= j+max }).count == 0 {
+                        var isStop = false
+                        var isMax = false
+                        while !isStop {
+                            if i+max < board.count && j+max < board[0].count {
+                                if !isMax {
+                                    for k in i...i+max {
+                                        for l in j...j+max {
+                                            if board[k][l] == 0 {
+                                                isStop = true
+                                                zeroList.append([k,l])
+                                                if l > jumpIndex {
+                                                    jumpIndex = l
+                                                }
+                                                break
+                                            }
+                                        }
+                                        if isStop {
+                                            break
+                                        }
+                                    }
+                                } else {
+                                    for k in i...i+max-1 {
+                                        if board[k][j+max] == 0 {
+                                            isStop = true
+                                            zeroList.append([k,j+max])
+                                            if j+max > jumpIndex {
+                                                jumpIndex = j+max
+                                            }
+                                            break
+                                        }
+                                    }
+                                    if !isStop {
+                                        for l in j...j+max {
+                                            if board[i+max][l] == 0 {
+                                                isStop = true
+                                                zeroList.append([i+max,l])
+                                                if l > jumpIndex {
+                                                    jumpIndex = l
+                                                }
+                                                break
+                                            }
+                                        }
+                                    }
+                                }
+                                if !isStop {
+                                    isMax = true
+                                    max += 1
+                                }
+                            } else {
+                                isStop = true
+                                break
+                            }
+                        }
+                    }
+                } else {
+                    break
+                }
+            }
+        } else {
+            break
+        }
     }
+    return max*max
+}
+
+solution111111111111([[0, 0, 1, 1], [1, 1, 1, 1]])
+
+// 2,3 실패
+func solution11111111111(_ board:[[Int]]) -> Int {
+    var max:Int = 0
+    for i in 0...board.count-1 {
+        if i+max < board.count {
+            var jumpIndex = -1
+            for j in 0...board[0].count-1 {
+                if j+max < board[0].count {
+                    if board[i][j] == 1 && j > jumpIndex {
+                        var isStop = false
+                        var isMax = false
+                        while !isStop {
+                            if i+max < board.count && j+max < board[0].count {
+                                if !isMax {
+                                    for k in i...i+max {
+                                        for l in j...j+max {
+                                            if board[k][l] == 0 {
+                                                isStop = true
+                                                if l > jumpIndex {
+                                                    jumpIndex = l
+                                                }
+                                                break
+                                            }
+                                        }
+                                        if isStop {
+                                            break
+                                        }
+                                    }
+                                } else {
+                                    for k in i...i+max-1 {
+                                        if board[k][j+max] == 0 {
+                                            isStop = true
+                                            if j+max > jumpIndex {
+                                                jumpIndex = j+max
+                                            }
+                                            break
+                                        }
+                                    }
+                                    if !isStop {
+                                        for l in j...j+max {
+                                            if board[i+max][l] == 0 {
+                                                isStop = true
+                                                if l > jumpIndex {
+                                                    jumpIndex = l
+                                                }
+                                                break
+                                            }
+                                        }
+                                    }
+                                }
+                                if !isStop {
+                                    isMax = true
+                                    max += 1
+                                }
+                            } else {
+                                isStop = true
+                                break
+                            }
+                        }
+                    }
+                } else {
+                    break
+                }
+            }
+        } else {
+            break
+        }
+    }
+    return max*max
+}
+
+solution11111111111([[0, 0, 1, 1], [1, 1, 1, 1]])
+
+// 효울성 1,3 실패
+func solution1111111111(_ board:[[Int]]) -> Int {
+    var max:Int = 0
+    var zeroList:[[Int]] = []
+    for i in 0...board.count-1 {
+        if i+max < board.count {
+            var zeroFilterList = zeroList.filter({ $0[0] >= i && $0[0] <= i+max })
+            for j in 0...board[0].count-1 {
+                if j+max < board[0].count {
+                    if board[i][j] == 1 && zeroFilterList.filter({ $0[1] >= j && $0[1] <= j+max }).count == 0 {
+                        var isStop = false
+                        var isMax = false
+                        while !isStop {
+                            if i+max < board.count && j+max < board[0].count {
+                                if !isMax {
+                                    for k in i...i+max {
+                                        for l in j...j+max {
+                                            if board[k][l] == 0 {
+                                                isStop = true
+                                                zeroList.append([k,l])
+                                                break
+                                            }
+                                        }
+                                        if isStop {
+                                            break
+                                        }
+                                    }
+                                } else {
+                                    for k in i...i+max-1 {
+                                        if board[k][j+max] == 0 {
+                                            isStop = true
+                                            zeroList.append([k,j+max])
+                                            break
+                                        }
+                                    }
+                                    if !isStop {
+                                        for l in j...j+max {
+                                            if board[i+max][l] == 0 {
+                                                isStop = true
+                                                zeroList.append([i+max,l])
+                                                break
+                                            }
+                                        }
+                                    }
+                                }
+                                if !isStop {
+                                    isMax = true
+                                    max += 1
+                                }
+                            } else {
+                                isStop = true
+                                break
+                            }
+                        }
+                    }
+                } else {
+                    break
+                }
+            }
+        } else {
+            break
+        }
+    }
+    return max*max
+}
+
+solution1111111111([[0, 0, 1, 1], [1, 1, 1, 1]])
+
+// 효율성 1 탈락
+func solution111111111(_ board:[[Int]]) -> Int {
+    var max:Int = 0
+    var zeroList:[[Int]] = []
+    for i in 0...board.count-1 {
+        if i+max < board.count {
+            for j in 0...board[0].count-1 {
+                if j+max < board[0].count {
+                    if board[i][j] == 1 && zeroList.filter({ $0[0] >= i && $0[0] <= i+max && $0[1] >= j && $0[1] <= j+max }).count == 0 {
+                        var isStop = false
+                        var isMax = false
+                        while !isStop {
+                            if i+max < board.count && j+max < board[0].count {
+                                if !isMax {
+                                    for k in i...i+max {
+                                        for l in j...j+max {
+                                            if board[k][l] == 0 {
+                                                isStop = true
+                                                zeroList.append([k,l])
+                                                break
+                                            }
+                                        }
+                                        if isStop {
+                                            break
+                                        }
+                                    }
+                                } else {
+                                    for k in i...i+max-1 {
+                                        if board[k][j+max] == 0 {
+                                            isStop = true
+                                            zeroList.append([k,j+max])
+                                            break
+                                        }
+                                    }
+                                    if !isStop {
+                                        for l in j...j+max {
+                                            if board[i+max][l] == 0 {
+                                                isStop = true
+                                                zeroList.append([i+max,l])
+                                                break
+                                            }
+                                        }
+                                    }
+                                }
+                                if !isStop {
+                                    isMax = true
+                                    max += 1
+                                }
+                            } else {
+                                isStop = true
+                                break
+                            }
+                        }
+                    }
+                } else {
+                    break
+                }
+            }
+        } else {
+            break
+        }
+    }
+    return max*max
+}
+
+solution111111111([[0, 0, 1, 1], [1, 1, 1, 1]])
+
+// 효율성 2,3 탈락
+func solution11111111(_ board:[[Int]]) -> Int {
+    var max:Int = 0
+    for i in 0...board.count-1 {
+        if i+max < board.count {
+            for j in 0...board[0].count-1 {
+                if j+max < board[0].count {
+                    if board[i][j] == 1 {
+                        var isStop = false
+                        var isMax = false
+                        while !isStop {
+                            if i+max < board.count && j+max < board[0].count {
+                                if !isMax {
+                                    for b in board[i...i+max] {
+                                        for k in j...j+max {
+                                            if b[k] == 0 {
+                                                isStop = true
+                                                break
+                                            }
+                                        }
+                                        if isStop {
+                                            break
+                                        }
+                                    }
+                                } else {
+                                    for b in board[i...i+max-1] {
+                                        if b[j+max] != 1 {
+                                            isStop = true
+                                            break
+                                        }
+                                    }
+                                    if !isStop {
+                                        for k in j...j+max {
+                                            if board[i+max][k] == 0 {
+                                                isStop = true
+                                                break
+                                            }
+                                        }
+                                    }
+                                }
+                                if !isStop {
+                                    isMax = true
+                                    max += 1
+                                }
+                            } else {
+                                isStop = true
+                                break
+                            }
+                        }
+                    }
+                } else {
+                    break
+                }
+            }
+        } else {
+            break
+        }
+    }
+    return max*max
+}
+
+solution11111111([[0, 0, 1, 1], [1, 1, 1, 1]])
+solution11111111([[0,1,1,1],[1,1,1,1],[1,1,1,1],[0,0,1,0]])
+
+func solution1111111(_ board:[[Int]]) -> Int {
+    var max:Int = 0
+    for i in 0...board.count-1 {
+        for j in 0...board[0].count-1 {
+            if board[i][j] == 1 {
+                var isStop = false
+                while !isStop {
+                    if i+max < board.count && j+max < board[0].count {
+                        for k in 0...max {
+                            for l in 0...max {
+                                if board[i+k][j+l] == 0 {
+                                    isStop = true
+                                    break
+                                }
+                            }
+                            if isStop {
+                                break
+                            }
+                        }
+                        if !isStop {
+                            max += 1
+                        }
+                    } else {
+                        isStop = true
+                    }
+                }
+            }
+        }
+    }
+    return max*max
+}
+
+solution1111111([[0, 0, 1, 1], [1, 1, 1, 1]])
+solution1111111([[0,1,1,1],[1,1,1,1],[1,1,1,1],[0,0,1,0]])
+
+func solution111111(_ board:[[Int]]) -> Int {
     var maxOneOne:Int = 0
     var boardFilter:[Int] = board.map({
         var maxOne:Int = 0
