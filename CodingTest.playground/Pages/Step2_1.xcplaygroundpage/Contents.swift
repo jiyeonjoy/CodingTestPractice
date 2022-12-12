@@ -92,10 +92,67 @@ solution10([[1, 4], [3, 2], [4, 1]],[[3, 3], [3, 3]])
  제한사항
  n은 15이하의 자연수 입니다.
 */
-// TODO
-func solution9(_ n:Int) -> [[Int]] {
-    return []
+func solution91(_ n:Int) -> [[Int]] {
+    var result:[[Int]] = []
+    var isEven = n%2==0
+    var first:Int = isEven ? 2 : 1
+    var second:Int = isEven ? 1 : 2
+    for i in 1...n {
+        for j in 1...Int(pow(2, Double(i-1))) {
+            result.append([first, 3])
+        }
+    }
+    return result
 }
+solution91(1)
+solution91(2) // [ [1,2], [1,3], [2,3] ]
+
+func solution9(_ n:Int) -> [[Int]] {
+    var firstTower:[Int] = Array(2...n).reversed()
+    var secondTower:[Int] = []
+    var thirdTower:[Int] = []
+    var result:[[Int]] = []
+    if n%2 == 0 {
+        secondTower.append(1)
+        result.append([1,2])
+    } else {
+        thirdTower.append(1)
+        result.append([1,3])
+    }
+    while true {
+        if firstTower.isEmpty && secondTower.isEmpty {
+            break
+        }
+        
+        if secondTower.isEmpty {
+            if thirdTower.last! > firstTower.last! {
+                secondTower.append(firstTower.last!)
+                firstTower.removeLast()
+                result.append([1,2])
+            } else {
+                thirdTower.append(firstTower.last!)
+                firstTower.removeLast()
+                result.append([1,3])
+            }
+        } else if thirdTower.isEmpty {
+            if secondTower.last! > firstTower.last! {
+                thirdTower.append(firstTower.last!)
+                firstTower.removeLast()
+                result.append([1,3])
+            } else {
+                secondTower.append(firstTower.last!)
+                firstTower.removeLast()
+                result.append([1,2])
+            }
+        } else if firstTower.isEmpty {
+            
+        }
+    }
+    
+    return result
+}
+
+solution9(2) // [ [1,2], [1,3], [2,3] ]
 
 /* 피보나치 수
 
@@ -325,6 +382,7 @@ func solution2(_ s:String) -> Bool {
  표(board)의 열(column)의 크기 : 1,000 이하의 자연수
  표(board)의 값은 1또는 0으로만 이루어져 있습니다.
 */
+// 성공!!
 func solution111111111111(_ board:[[Int]]) -> Int {
     var max:Int = 0
     var zeroList:[[Int]] = []

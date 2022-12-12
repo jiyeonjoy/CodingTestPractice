@@ -796,10 +796,54 @@ solution4(["Enter uid1234 Muzi", "Enter uid4567 Prodo","Leave uid1234","Enter ui
  number는 2자리 이상, 1,000,000자리 이하인 숫자입니다.
  k는 1 이상 number의 자릿수 미만인 자연수입니다.
 */
-// TODO
+
+//func combinations<T>(source: [T], takenBy : Int) -> [[T]] {
+//    if(source.count == takenBy) {
+//        return [source]
+//    }
+//
+//    if(source.isEmpty) {
+//        return []
+//    }
+//
+//    if(takenBy == 0) {
+//        return []
+//    }
+//
+//    if(takenBy == 1) {
+//        return source.map { [$0] }
+//    }
+//
+//    var result : [[T]] = []
+//
+//    let rest = Array(source.suffix(from: 1))
+//    let subCombos = combinations(source: rest, takenBy: takenBy - 1)
+//    result += subCombos.map { [source[0]] + $0 }
+//    result += combinations(source: rest, takenBy: takenBy)
+//    return result
+//}
+
 func solution3(_ number:String, _ k:Int) -> String {
-    String(number.sorted(by: >)[0...number.count-1-k])
+    if number.count-k == 1 {
+        return String(number.sorted(by: >)[0])
+    }
+    var max:Int = 0
+    var list = combinations(source: Array(number), takenBy: number.count-k).sorted{ ($0[0] > $1[0]) || ($0[0] == $1[0] && $0[1] > $1[1]) }
+    var first = list[0][0]
+    var second = list[0][1]
+    for i in list {
+        if i[0] == first && i[1] == second {
+            if Int(String(i)) ?? 0 > max {
+                max = Int(String(i))!
+            }
+        } else {
+            break
+        }
+    }
+    return String(max)
 }
+
+solution3("1231234", 3) // 3234
 
 /* 조이스틱
 

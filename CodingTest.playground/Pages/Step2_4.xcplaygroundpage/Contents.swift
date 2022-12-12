@@ -202,7 +202,184 @@ solution18(5, [[0,0],[0,-1],[2,-3],[3,-3]])
  1 ≤ topping의 길이 ≤ 1,000,000
  1 ≤ topping의 원소 ≤ 10,000
 */
-func solution176(_ topping:[Int]) -> Int {
+func solution174(_ topping:[Int]) -> Int {
+    if topping.count == 1 {
+        return 0
+    }
+    var sameIndexList:[Int] = []
+    var startIndex:Int = 0
+    var endIndex:Int = topping.count-1
+    var mediumIndex:Int = startIndex + (endIndex-startIndex+1)/2
+    while true {
+        if sameIndexList.count > 1 && sameIndexList[0] == startIndex && sameIndexList[sameIndexList.count-1] == endIndex {
+            break
+        }
+        if endIndex - startIndex < 1 ||
+            startIndex > endIndex ||
+            mediumIndex <= startIndex ||
+            mediumIndex >= endIndex {
+            break
+        }
+        if sameIndexList.count == 0 {
+            var firstSet:Set<Int> = Set<Int>()
+            firstSet.formUnion(topping[0...mediumIndex])
+            var secondSet:Set<Int> = Set<Int>()
+            secondSet.formUnion(topping[mediumIndex+1...topping.count-1])
+            if firstSet.count == secondSet.count {
+                sameIndexList.append(mediumIndex)
+                mediumIndex = startIndex + (mediumIndex-startIndex+1)/2
+            } else if firstSet.count < secondSet.count {
+                startIndex = mediumIndex
+            } else {
+                endIndex = mediumIndex
+            }
+        } else {
+            var firstSet:Set<Int> = Set<Int>()
+            firstSet.formUnion(topping[0...mediumIndex])
+            var secondSet:Set<Int> = Set<Int>()
+            secondSet.formUnion(topping[mediumIndex+1...topping.count-1])
+            if firstSet.count == secondSet.count {
+                if !sameIndexList.contains(startIndex) {
+                    sameIndexList.insert(mediumIndex, at: 0)
+                    mediumIndex = startIndex + (mediumIndex-startIndex+1)/2
+                } else {
+                    sameIndexList.append(mediumIndex)
+                    mediumIndex = mediumIndex + (endIndex-mediumIndex+1)/2
+                }
+            } else if firstSet.count < secondSet.count {
+                startIndex = mediumIndex
+            } else {
+                endIndex = mediumIndex
+            }
+        }
+     }
+    
+    return sameIndexList.count > 1 ? sameIndexList[sameIndexList.count-1] - sameIndexList[0] + 1 : sameIndexList.count
+}
+
+solution174([1, 2, 3, 1, 4])
+solution174([1, 2, 1, 3, 1, 4, 1, 2])
+
+func solution173(_ topping:[Int]) -> Int {
+    if topping.count == 1 {
+        return 0
+    }
+    var isMatch = false
+    var matchIndex = 0
+    for i in 0...topping.count-1 {
+        var firstSet:Set<Int> = Set<Int>()
+        firstSet.formUnion(topping[0...i])
+        var secondSet:Set<Int> = Set<Int>()
+        secondSet.formUnion(topping[i+1...topping.count-1])
+        if firstSet.count == secondSet.count {
+            isMatch = true
+            matchIndex = i
+            break
+        } else if firstSet.count > secondSet.count {
+            break
+        }
+    }
+    if !isMatch {
+        return 0
+    }
+    var matchIndex2 = 0
+    for i in 0...topping.count-1 {
+        var firstSet:Set<Int> = Set<Int>()
+        firstSet.formUnion(topping[0...topping.count-i-2])
+        var secondSet:Set<Int> = Set<Int>()
+        secondSet.formUnion(topping[topping.count-1-i...topping.count-1])
+        if firstSet.count == secondSet.count {
+            matchIndex2 = topping.count-1-i
+            break
+        }
+    }
+    
+    return matchIndex2-matchIndex
+}
+
+solution173([1, 2, 3, 1, 4])
+solution173([1, 2, 1, 3, 1, 4, 1, 2])
+
+func solution172(_ topping:[Int]) -> Int {
+    if topping.count == 1 {
+        return 0
+    }
+    var result:Int = 0
+    for i in 0...topping.count-1 {
+        var firstSet:Set<Int> = Set<Int>()
+        firstSet.formUnion(topping[0...i])
+        var secondSet:Set<Int> = Set<Int>()
+        secondSet.formUnion(topping[i+1...topping.count-1])
+        if firstSet.count == secondSet.count {
+            result += 1
+        } else if firstSet.count > secondSet.count {
+            break
+        }
+    }
+    return result
+}
+
+solution172([1, 2, 3, 1, 4])
+solution172([1, 2, 1, 3, 1, 4, 1, 2])
+
+func solution171(_ topping:[Int]) -> Int {
+    var set0:Set<Int> = Set<Int>()
+    set0.formUnion(topping)
+    if set0.count == 1 {
+        return topping.count-1
+    }
+    var minCount:Int = (set0.count+1)/2
+    var set1:Set<Int> = Set<Int>()
+    set1.formUnion(topping[0...minCount-1])
+    
+    var set2:Set<Int> = Set<Int>()
+    var firstCount:Int = set1.count
+    var secondCount:Int = 0
+    var result:Int = 0
+    for i in minCount...topping.count-1 {
+        if firstCount < minCount {
+            if !set1.contains(topping[i]) {
+                set1.insert(topping[i])
+                firstCount += 1
+            }
+        } else {
+            if secondCount == 0 {
+                set2.formUnion(topping[i...topping.count-1])
+                firstCount = set1.count
+                secondCount = set2.count
+                if firstCount == secondCount {
+                    result += 1
+                } else if firstCount > secondCount {
+                    break
+                }
+                if topping.firstIndex(of: topping[i]) == i {
+                    firstCount += 1
+                }
+                if topping.lastIndex(of: topping[i]) == i {
+                    secondCount -= 1
+                }
+            } else {
+                if topping.firstIndex(of: topping[i]) == i {
+                    firstCount += 1
+                }
+                if topping.lastIndex(of: topping[i]) == i {
+                    secondCount -= 1
+                }
+            }
+            if firstCount == secondCount {
+                result += 1
+            } else if firstCount > secondCount {
+                break
+            }
+        }
+    }
+    return result
+}
+
+solution171([1, 2, 3, 1, 4])
+solution171([1, 2, 1, 3, 1, 4, 1, 2])
+
+func solution17(_ topping:[Int]) -> Int {
     var set0:Set<Int> = Set<Int>()
     set0.formUnion(topping)
     if set0.count == 1 {
@@ -211,13 +388,14 @@ func solution176(_ topping:[Int]) -> Int {
     var aList:[Int] = []
     var bList:[Int] = []
     var set1:Set<Int> = Set<Int>()
-    set1.formUnion(topping[0...set0.count/2-2])
+    
+    set1.formUnion(topping[0...(set0.count > 4 ? set0.count/2-2 : 0)])
     var isMatch = false
     var set2:Set<Int> = Set<Int>()
-    
+    set2.formUnion(topping[(set0.count > 4 ? set0.count/2-2 : 0)...topping.count-1])
     var result:Int = 0
     
-    for i in set0.count/2-1...topping.count-1-set0.count/2 {
+    for i in (set0.count > 4 ? set0.count/2-1 : 1)...topping.count-1-set0.count/2 {
         if isMatch {
             bList.removeFirst()
             if aList.contains(topping[i]) && bList.contains(topping[i]) {
@@ -227,102 +405,13 @@ func solution176(_ topping:[Int]) -> Int {
             }
         } else {
             set1.insert(topping[i])
-            if set1.count >= set0.count/2 {
-                set2.removeAll()
-                set2.formUnion(topping[i+1...topping.count-1])
-                if set1.count == set2.count {
-                    isMatch = true
-                    result += 1
-                    aList = Array(topping[0...i])
-                    bList = Array(topping[i+1...topping.count-1])
-                } else if set1.count > set2.count {
-                    break
-                }
-            }
-        }
-    }
-    return result
-}
-
-func solution175(_ topping:[Int]) -> Int {
-    var set0:Set<Int> = Set<Int>()
-    set0.formUnion(topping)
-    
-    var result:Int = 0
-    var set1:Set<Int> = Set<Int>()
-    set1.formUnion(topping[0...set0.count/2-1])
-    var set2:Set<Int> = Set<Int>()
-    var isMatch = false
-    for i in set0.count/2-1...topping.count-1-set0.count/2 {
-        if isMatch {
-            if set1.contains(topping[i]) {
-                result += 1
-            } else {
-                break
-            }
-        } else {
-            set1.insert(topping[i])
-            if set1.count >= set0.count/2 {
-                set2.removeAll()
-                set2.formUnion(topping[i+1...topping.count-1])
-                if set1.count == set2.count {
-                    result += 1
-                    isMatch = true
-                } else if set1.count > set2.count {
-                    break
-                }
-            }
-        }
-        
-    }
-    return isMatch ? result : 0
-}
-
-func solution174(_ topping:[Int]) -> Int {
-    var set0:Set<Int> = Set<Int>()
-    set0.formUnion(topping)
-    
-    var result:Int = 0
-    var set1:Set<Int> = Set<Int>()
-    set1.formUnion(topping[0...set0.count/2-1])
-    
-    var isMatch = false
-    for i in set0.count/2-1...topping.count-1-set0.count/2 {
-        if isMatch {
-            if set1.contains(topping[i]) {
-                result += 1
-            } else {
-                break
-            }
-        } else {
-            set1.insert(topping[i])
-            if set1.count >= set0.count/2 {
-                var set2:Set<Int> = Set<Int>()
-                set2.formUnion(topping[i+1...topping.count-1])
-                if set1.count == set2.count {
-                    result += 1
-                    isMatch = true
-                }
-            }
-        }
-        
-    }
-    return result
-}
-
-func solution173(_ topping:[Int]) -> Int {
-    var dic = Dictionary(grouping: topping) { $0 }
-    var result:Int = 0
-    var set1:Set<Int> = Set<Int>()
-    set1.formUnion(topping[0...dic.count/2-1])
-    var set2:Set<Int> = Set<Int>()
-    for i in dic.count/2-1...topping.count-1-dic.count/2 {
-        set1.insert(topping[i])
-        if set1.count >= dic.count/2 {
             set2.removeAll()
             set2.formUnion(topping[i+1...topping.count-1])
             if set1.count == set2.count {
+                isMatch = true
                 result += 1
+                aList = Array(topping[0...i])
+                bList = Array(topping[i+1...topping.count-1])
             } else if set1.count > set2.count {
                 break
             }
@@ -331,46 +420,75 @@ func solution173(_ topping:[Int]) -> Int {
     return result
 }
 
-func solution172(_ topping:[Int]) -> Int {
-    var dic = Dictionary(grouping: topping) { $0 }
-    var result:Int = 0
-    for i in dic.count/2-1...topping.count-1-dic.count/2 {
-        var set1:Set<Int> = Set<Int>()
-        set1.formUnion(topping[0...i])
-        var set2:Set<Int> = Set<Int>()
-        set2.formUnion(topping[i+1...topping.count-1])
-        if set1.count == set2.count {
-            result += 1
-        } else if set1.count > dic.count/2 {
-            break
-        }
-    }
-    return result
-}
-
-func solution171(_ topping:[Int]) -> Int {
-    var result:Int = 0
-    var set1:Set<Int> = Set<Int>()
-    set1.insert(topping[0])
-    for i in 1...topping.count-2 {
-        set1.insert(topping[i])
-        var set2:Set<Int> = Set<Int>()
-        set2.formUnion(topping[i+1...topping.count-1])
-        if set1.count == set2.count {
-            result += 1
-        } else if set1.count > set2.count {
-            break
-        }
-    }
-    return result
-}
-
-//solution17([1, 2, 1, 3, 1, 4, 1, 2])
+solution17([1, 2, 1, 3, 1, 4, 1, 2])
 
 /* 택배상자
 
- -
+ - 영재는 택배상자를 트럭에 싣는 일을 합니다. 영재가 실어야 하는 택배상자는 크기가 모두 같으며 1번 상자부터 n번 상자까지 번호가 증가하는 순서대로 컨테이너 벨트에 일렬로 놓여 영재에게 전달됩니다. 컨테이너 벨트는 한 방향으로만 진행이 가능해서 벨트에 놓인 순서대로(1번 상자부터) 상자를 내릴 수 있습니다. 하지만 컨테이너 벨트에 놓인 순서대로 택배상자를 내려 바로 트럭에 싣게 되면 택배 기사님이 배달하는 순서와 택배상자가 실려 있는 순서가 맞지 않아 배달에 차질이 생깁니다. 따라서 택배 기사님이 미리 알려준 순서에 맞게 영재가 택배상자를 실어야 합니다.
+ 
+ 만약 컨테이너 벨트의 맨 앞에 놓인 상자가 현재 트럭에 실어야 하는 순서가 아니라면 그 상자를 트럭에 실을 순서가 될 때까지 잠시 다른 곳에 보관해야 합니다. 하지만 고객의 물건을 함부로 땅에 둘 수 없어 보조 컨테이너 벨트를 추가로 설치하였습니다. 보조 컨테이너 벨트는 앞 뒤로 이동이 가능하지만 입구 외에 다른 면이 막혀 있어서 맨 앞의 상자만 뺄 수 있습니다(즉, 가장 마지막에 보조 컨테이너 벨트에 보관한 상자부터 꺼내게 됩니다). 보조 컨테이너 벨트를 이용해도 기사님이 원하는 순서대로 상자를 싣지 못 한다면, 더 이상 상자를 싣지 않습니다.
+
+ 예를 들어, 영재가 5개의 상자를 실어야 하며, 택배 기사님이 알려준 순서가 기존의 컨테이너 벨트에 네 번째, 세 번째, 첫 번째, 두 번째, 다섯 번째 놓인 택배상자 순서인 경우, 영재는 우선 첫 번째, 두 번째, 세 번째 상자를 보조 컨테이너 벨트에 보관합니다. 그 후 네 번째 상자를 트럭에 싣고 보조 컨테이너 벨트에서 세 번째 상자 빼서 트럭에싣습니다. 다음으로 첫 번째 상자를 실어야 하지만 보조 컨테이너 벨트에서는 두 번째 상자를, 기존의 컨테이너 벨트에는 다섯 번째 상자를 꺼낼 수 있기 때문에 더이상의 상자는 실을 수 없습니다. 따라서 트럭에는 2개의 상자만 실리게 됩니다.
+
+ 택배 기사님이 원하는 상자 순서를 나타내는 정수 배열 order가 주어졌을 때, 영재가 몇 개의 상자를 실을 수 있는지 return 하는 solution 함수를 완성하세요.
+
+ 제한사항
+ 1 ≤ order의 길이 ≤ 1,000,000
+ order는 1이상 order의 길이 이하의 모든 정수가 한번씩 등장합니다.
+ order[i]는 기존의 컨테이너 벨트에 order[i]번째 상자를 i+1번째로 트럭에 실어야 함을 의미합니다.
 */
+struct Stack<T> {
+    private var stack: [T] = []
+    
+    public var count: Int {
+        return stack.count
+    }
+    
+    public var isEmpty: Bool {
+        return stack.isEmpty
+    }
+    
+    public mutating func push(_ element: T) {
+        stack.append(element)
+    }
+    
+    public mutating func pop() -> T? {
+        return isEmpty ? nil : stack.popLast()!
+    }
+    
+}
+
+func solution16(_ order:[Int]) -> Int {
+    var result:Int = 0
+    var mainBeltIndex = 1
+    var secondBelt: Stack = Stack<Int>()
+    var secondLastValue: Int = 0
+    while true {
+        if order[result] > mainBeltIndex {
+            secondBelt.push(mainBeltIndex)
+            mainBeltIndex += 1
+        } else if order[result] == mainBeltIndex {
+            result += 1
+            mainBeltIndex += 1
+        } else if secondBelt.count > 0 {
+            secondLastValue = secondBelt.pop()!
+            if secondLastValue == order[result] {
+                result += 1
+            } else {
+                break
+            }
+        } else {
+            break
+        }
+        if result == order.count {
+            break
+        }
+    }
+    return result
+}
+
+solution16([4, 3, 1, 2, 5])
+solution16([5, 4, 3, 2, 1])
 
 /* 연속 부분 수열 합의 개수
 
