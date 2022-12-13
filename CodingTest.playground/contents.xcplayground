@@ -8,6 +8,7 @@
         <page name='MinHeap'/>
         <page name='MaxHeap'/>
         <page name='Stack'/>
+        <page name='Queue'/>
         <page name='Step0_1'/>
         <page name='Step0_2'/>
         <page name='Step0_3'/>
