@@ -12,10 +12,64 @@ import Foundation
  퀸(Queen)은 가로, 세로, 대각선으로 이동할 수 있습니다.
  n은 12이하의 자연수 입니다.
 */
-// TODO
 func solution12(_ n:Int) -> Int {
-    return 0
+    if n < 4 {
+        return 0
+    }
+    var cp:[[Int]] = []
+    for _ in 1...n {
+        var list:[Int] = []
+        for _ in 1...n {
+            list.append(1)
+        }
+        cp.append(list)
+    }
+    
+    var result:Int = 0
+    for i in 0...n-1 {
+        var copy = cp
+        copy[0][i] = 0
+        copy = setZero(copy, 0, i)
+        var isS = true
+        var count:Int = 1
+        for j in 1...n-1 {
+            count *= copy[j].filter{ $0 == 1 }.count
+            var next:Int = copy[j].firstIndex(of: 1) ?? -1
+            if next == -1 {
+                isS = false
+                break
+            } else {
+                copy = setZero(copy, j, next)
+            }
+        }
+        if isS {
+            result += count
+        }
+    }
+    return result
 }
+
+func setZero(_ cp:[[Int]], _ c:Int, _ r:Int) -> [[Int]] {
+    var copy = cp
+    var min:Int = c >= r ? r : c
+    for i in 0...cp.count-1 {
+        copy[c][r] = 0
+        copy[c][i] = 0
+        copy[i][r] = 0
+        if c - min + i < cp.count && r - min + i < cp.count {
+            copy[c-min+i][r-min+i] = 0
+        }
+        if c+i+1 < cp.count && c+i+1 > -1 && r-1-i < cp.count && r-1-i > -1 {
+            copy[c+i+1][r-1-i] = 0
+        }
+        if c-i-1 < cp.count && c-i-1 > -1 && r+1+i < cp.count && r+1+i > -1 {
+            copy[c-i-1][r+1+i] = 0
+        }
+    }
+    return copy
+}
+
+solution12(5)
 
 /* JadenCase 문자열 만들기
 
