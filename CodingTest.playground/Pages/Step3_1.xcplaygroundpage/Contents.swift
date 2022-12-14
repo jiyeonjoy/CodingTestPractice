@@ -1,5 +1,61 @@
 import Foundation
 
+/* 베스트앨범
+ 
+ - 스트리밍 사이트에서 장르 별로 가장 많이 재생된 노래를 두 개씩 모아 베스트 앨범을 출시하려 합니다. 노래는 고유 번호로 구분하며, 노래를 수록하는 기준은 다음과 같습니다.
+ 
+ 속한 노래가 많이 재생된 장르를 먼저 수록합니다.
+ 장르 내에서 많이 재생된 노래를 먼저 수록합니다.
+ 장르 내에서 재생 횟수가 같은 노래 중에서는 고유 번호가 낮은 노래를 먼저 수록합니다.
+ 노래의 장르를 나타내는 문자열 배열 genres와 노래별 재생 횟수를 나타내는 정수 배열 plays가 주어질 때, 베스트 앨범에 들어갈 노래의 고유 번호를 순서대로 return 하도록 solution 함수를 완성하세요.
+
+ 제한사항
+ genres[i]는 고유번호가 i인 노래의 장르입니다.
+ plays[i]는 고유번호가 i인 노래가 재생된 횟수입니다.
+ genres와 plays의 길이는 같으며, 이는 1 이상 10,000 이하입니다.
+ 장르 종류는 100개 미만입니다.
+ 장르에 속한 곡이 하나라면, 하나의 곡만 선택합니다.
+ 모든 장르는 재생된 횟수가 다릅니다.
+*/
+func solution5(_ genres:[String], _ plays:[Int]) -> [Int] {
+    var dic:[String:[Int]] = [:]
+    for i in 0...genres.count-1 {
+        if dic[genres[i]] != nil {
+            var list:[Int] = dic[genres[i]] ?? []
+            list.append(plays[i])
+            dic[genres[i]] = list
+        } else {
+            dic[genres[i]] = [plays[i]]
+        }
+    }
+    var sorted = dic.sorted{ $0.value.reduce(0,+) > $1.value.reduce(0,+) }
+    var valueList:[Int] = []
+    var genreList:[String] = []
+    for i in sorted {
+        var list = i.value.sorted(by: >)
+        valueList.append(list[0])
+        genreList.append(i.key)
+        if list.count > 1 {
+            valueList.append(list[1])
+            genreList.append(i.key)
+        }
+    }
+    var result:[Int] = []
+    var copyPlays = plays
+    for i in 0...valueList.count-1 {
+        for j in 0...genres.count-1 {
+            if copyPlays[j] == valueList[i] && genres[j] == genreList[i] {
+                result.append(j)
+                copyPlays[j] = 0
+                break
+            }
+        }
+    }
+    return result
+}
+
+solution5(["classic", "pop", "classic", "classic", "pop"], [500, 600, 150, 800, 2500])
+
 /* 숫자 게임
  
  - xx 회사의 2xN명의 사원들은 N명씩 두 팀으로 나눠 숫자 게임을 하려고 합니다. 두 개의 팀을 각각 A팀과 B팀이라고 하겠습니다. 숫자 게임의 규칙은 다음과 같습니다.
