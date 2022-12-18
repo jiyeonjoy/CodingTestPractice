@@ -202,23 +202,32 @@ func solution3(_ begin:String, _ target:String, _ words:[String]) -> Int {
  computer[i][i]는 항상 1입니다.
 */
 func solution2(_ n:Int, _ computers:[[Int]]) -> Int {
+    var visited:[Bool] = Array.init(repeating: false, count: n)
     var result:Int = 0
-    var list:[[Int]] = []
-    for i in 0...computers.count-1 {
-        if computers[i].filter{ $0 == 1 }.count == 1 {
-            result += 1
-        } else {
-            var existList:[Int] = []
-            for j in 0...list.count-1 {
-                if list[j].contains(i) {
-                    existList.append(j)
-                }
-            }
-            
+    while true {
+        if visited.firstIndex(of: false) == nil {
+            break
         }
+        var start = visited.firstIndex(of: false)!
+        result += 1
+        visited = dfs(start: start, visited: visited, computers: computers)
     }
     return result
 }
+
+func dfs(start: Int, visited: [Bool], computers:[[Int]]) -> [Bool] {
+    var copy = visited
+    copy[start] = true
+    
+    for i in 0...computers.count-1 {
+        if computers[start][i] == 1 && !copy[i] {
+            copy = dfs(start: i, visited: copy, computers: computers)
+        }
+    }
+    return copy
+}
+
+solution2(3, [[1, 1, 0], [1, 1, 0], [0, 0, 1]])
 
 /* 이중우선순위큐
 
