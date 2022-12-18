@@ -648,30 +648,59 @@ solution9(2, ["Jeju", "Pangyo", "NewYork", "newyork"]) // 16
  출력 형식
  입력으로 주어진 판 정보를 가지고 몇 개의 블록이 지워질지 출력하라.
 */
-func findB(_ board:[String]) -> [String] {
-    var b:[String] = board
-    if b.count > 1 {
+func solution8(_ m:Int, _ n:Int, _ board:[String]) -> Int {
+    var b:[[Character]] = board.map{ Array($0) }
+    var result:Int = 0
+    while true {
+        var list:Set<[Int]> = Set<[Int]>()
         for i in 0...b.count-2 {
-            if b[i].count > 1 {
-                for j in 0...b[i].count-2 {
-                    var charList = Array(b[i])
-                    var charList2 = Array(b[i+1])
-                    if charList[j] == charList[j+1] && charList[j] == charList2[j] && charList[j] == charList2[j+1] {
-                        
-                    }
+            for j in 0...b[i].count-2 {
+                if b[i][j] != Character("0") && b[i][j] == b[i][j+1] && b[i][j] == b[i+1][j] && b[i][j] == b[i+1][j+1] {
+                    list.insert([i,j])
+                    list.insert([i,j+1])
+                    list.insert([i+1,j])
+                    list.insert([i+1,j+1])
                 }
             }
         }
+        if list.count == 0 {
+            break
+        }
+        result += list.count
+        var sorted = list.sorted{
+            if $0[0] < $1[0] {
+                return true
+            } else if $0[0] == $1[0] {
+                if $0[1] < $1[1] {
+                    return true
+                } else {
+                    return false
+                }
+            } else {
+                return false
+            }
+        }
+        for value in sorted {
+            var upValue:[Character] = []
+            if value[0] > 0 {
+                for i in 0...value[0]-1 {
+                    if b[i][value[1]] != Character("0") {
+                        upValue.append(b[i][value[1]])
+                        b[i][value[1]] = "0"
+                    }
+                }
+                if upValue.count == 0 {
+                    b[value[0]][value[1]] = "0"
+                } else {
+                    for i in 0...upValue.count-1 {
+                        b[value[0]-i][value[1]] = upValue[upValue.count-1-i]
+                    }
+                }
+            } else {
+                b[value[0]][value[1]] = "0"
+            }
+        }
     }
-    return []
-}
-
-func solution8(_ m:Int, _ n:Int, _ board:[String]) -> Int {
-    var b:[String] = board
-    var result:Int = 0
-    
-    findB(b)
-    
     return result
 }
 
