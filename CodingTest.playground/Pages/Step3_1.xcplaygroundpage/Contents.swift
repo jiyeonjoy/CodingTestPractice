@@ -182,12 +182,37 @@ func solution3(_ begin:String, _ target:String, _ words:[String]) -> Int {
     if !words.contains(target) {
         return 0
     }
-    var result:Int = 0
+    var minCount:Int = words.count+1
     
-    
-    
-    return result
+    func findWord(_ begin:String, _ history: [String]) -> [String] {
+        var copy = history
+        copy.append(begin)
+        for word in words {
+            if !copy.contains(word) {
+                var differentCount: Int = 0
+                for i in 0...word.count-1 {
+                    if Array(begin)[i] != Array(word)[i] {
+                        differentCount += 1
+                    }
+                }
+                if differentCount == 1 {
+                    if word == target {
+                        minCount = min(minCount, copy.count)
+                    } else {
+                        findWord(word, copy)
+                    }
+                }
+            }
+        }
+        return copy
+    }
+
+    findWord(begin, [])
+
+    return minCount
 }
+
+solution3("hit", "cog", ["hot", "dot", "dog", "lot", "log", "cog"]) // 4
 
 /* 네트워크
 
