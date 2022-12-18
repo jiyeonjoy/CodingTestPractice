@@ -796,34 +796,270 @@ solution4(["Enter uid1234 Muzi", "Enter uid4567 Prodo","Leave uid1234","Enter ui
  number는 2자리 이상, 1,000,000자리 이하인 숫자입니다.
  k는 1 이상 number의 자릿수 미만인 자연수입니다.
 */
-
-//func combinations<T>(source: [T], takenBy : Int) -> [[T]] {
-//    if(source.count == takenBy) {
-//        return [source]
-//    }
-//
-//    if(source.isEmpty) {
-//        return []
-//    }
-//
-//    if(takenBy == 0) {
-//        return []
-//    }
-//
-//    if(takenBy == 1) {
-//        return source.map { [$0] }
-//    }
-//
-//    var result : [[T]] = []
-//
-//    let rest = Array(source.suffix(from: 1))
-//    let subCombos = combinations(source: rest, takenBy: takenBy - 1)
-//    result += subCombos.map { [source[0]] + $0 }
-//    result += combinations(source: rest, takenBy: takenBy)
-//    return result
-//}
-
 func solution3(_ number:String, _ k:Int) -> String {
+    var numberList:[Character] = Array(number)
+    var count = k
+    var index = 0
+    var result:[Character] = []
+    while count > 0 {
+        if index+count == numberList.count {
+            return String(result)
+        }
+        var maxValue:Character = numberList[index]
+        var maxIndex:Int = index
+        for i in index...index+count {
+            if numberList[i] == "9" {
+                maxValue = "9"
+                maxIndex = i
+                break
+            } else if maxValue < numberList[i] {
+                maxValue = numberList[i]
+                maxIndex = i
+            }
+        }
+        count -= maxIndex-index
+        index = maxIndex+1
+        result.append(maxValue)
+    }
+    if index < number.count-1 {
+        result += numberList[index...number.count-1]
+    }
+    return String(result)
+}
+
+solution3("1924", 2)
+solution3("4321", 1) // "432"
+solution3("4177252841", 4) // "775841"
+solution3("1231234", 3) // 3234
+
+// 시간초과
+func solution35(_ number:String, _ k:Int) -> String {
+    var numberList:[Character] = Array(number)
+    var count = k
+    var index = 0
+    var result:[Character] = []
+    while count > 0 {
+        if index+count == numberList.count {
+            print("aaa")
+            return String(result)
+        }
+        var list:[Character] = Array(numberList[index...index+count])
+        var maxValue:Character = "0"
+        for i in list {
+            if i == "9" {
+                maxValue = "9"
+                break
+            } else if maxValue < i {
+                maxValue = i
+            }
+        }
+        for i in index...index+count {
+            index += 1
+            if numberList[i] < maxValue {
+                count -= 1
+                print(count)
+            } else {
+                result.append(numberList[i])
+                break
+            }
+        }
+        
+    }
+    if index < number.count-1 {
+        result += numberList[index...number.count-1]
+    }
+    return String(result)
+}
+
+// 시간초과
+func solution34(_ number:String, _ k:Int) -> String {
+    var result:[Character] = Array(number)
+    var count = k
+    var index = 0
+    while count > 0 {
+        if index+count == result.count {
+            return String(result[0..<index].filter{ $0 != Character("A") })
+        }
+        var list:[Character] = Array(result[index...index+count])
+        var maxValue:Character = list.max()!
+        var minValue:Character = list.min()!
+        if maxValue == minValue {
+            for i in index+count+1...result.count-1 {
+                if result[i] > maxValue {
+                    index = i-1
+                    break
+                } else if result[i] < maxValue {
+                    index = i
+                    break
+                }
+            }
+        } else {
+            for i in index...index+count {
+                index += 1
+                if result[i] < maxValue {
+                    count -= 1
+                    result[i] = Character("A")
+                } else {
+                    break
+                }
+            }
+        }
+    }
+    
+    return String(result.filter{ $0 != Character("A") })
+}
+
+struct MaxHeap<T: Comparable> {
+    var heap: [T] = []
+
+    var isEmpty: Bool {
+        heap.count <= 1 ? true : false
+    }
+
+    init() {}
+    init(_ element: T) {
+        heap.append(element)
+        heap.append(element)
+    }
+    
+    mutating func insert(_ element: T) {
+        if heap.isEmpty {
+            heap.append(element)
+            heap.append(element)
+            return
+        }
+        heap.append(element)
+        
+        func isMoveUp(_ insertIndex: Int) -> Bool {
+            if insertIndex <= 1 { // rootNode
+                return false
+            }
+            let parentIndex = insertIndex / 2
+            return heap[insertIndex] > heap[parentIndex] ? true : false
+        }
+        
+        var insertIndex: Int = heap.count - 1
+        while isMoveUp(insertIndex) {
+            let parentIndex = insertIndex / 2
+            heap.swapAt(insertIndex, parentIndex)
+            insertIndex = parentIndex
+        }
+    }
+    
+    enum moveDownStatus {case left, right, none}
+    
+    mutating func pop() -> T? {
+        if heap.count <= 1 {
+            return nil
+        }
+        let returnData = heap[1]
+        heap.swapAt(1, heap.count - 1)
+        heap.removeLast()
+        
+        func moveDown(_ poppedIndex: Int) -> moveDownStatus {
+            let leftChildIndex = poppedIndex * 2
+            let rightChildIndex = leftChildIndex + 1
+            
+            // case1. 모든(왼쪽) 자식 노드가 없는 경우, (완전이진트리는 왼쪽부터 채워지므로)
+            if leftChildIndex >= heap.count {
+                return .none
+            }
+            
+            // case2. 왼쪽 자식 노드만 있는 경우,
+            if rightChildIndex >= heap.count {
+                return heap[leftChildIndex] > heap[poppedIndex] ? .left : .none
+            }
+            
+            // case3. 왼쪽&오른쪽 자식 노드 모두 있는 경우
+            // case3-1. 자식들보다 자신이 모두 큰 경우(자신이 제일 큰 경우)
+            if (heap[poppedIndex] > heap[leftChildIndex]) && (heap[poppedIndex] > heap[rightChildIndex]) {
+                return .none
+            }
+            
+            // case3-2. 자식들이 자신보다 모두 큰 경우(왼쪽과 오른쪽 자식 중, 더 큰 자식을 선별)
+            if (heap[poppedIndex] < heap[leftChildIndex]) && (heap[poppedIndex] < heap[rightChildIndex]) {
+                return heap[leftChildIndex] > heap[rightChildIndex] ? .left : .right
+            }
+            
+            // case3-3. 왼쪽과 오른쪽 자식 중, 한 자식만 자신보다 큰 경우, (= 둘 중 하나의 자식만 큰 경우)
+            if (heap[leftChildIndex] > heap[poppedIndex]) || (heap[rightChildIndex] > heap[poppedIndex]) {
+                return heap[leftChildIndex] > heap[rightChildIndex] ? .left : .right
+            }
+            return .none
+        }
+        
+        var poppedIndex = 1
+        while true {
+            switch moveDown(poppedIndex) {
+            case .none:
+                return returnData
+            case .left:
+                let leftChildIndex = poppedIndex * 2
+                heap.swapAt(leftChildIndex, poppedIndex)
+                poppedIndex = leftChildIndex
+            case .right:
+                let rightChildIndex = poppedIndex * 2 + 1
+                heap.swapAt(rightChildIndex, poppedIndex)
+                poppedIndex = rightChildIndex
+            }
+        }
+        
+    }
+}
+
+// 시간초과
+func solution33(_ number:String, _ k:Int) -> String {
+    var result:[Character] = Array(number)
+    var count = k
+    var index = 0
+    while count > 0 {
+        if index+count == result.count {
+            return String(result[0..<index].filter{ $0 != Character("A") })
+        }
+        var maxHeap: MaxHeap<Character> = MaxHeap()
+        for i in index...index+count {
+            maxHeap.insert(result[i])
+        }
+        var maxValue:Character = maxHeap.pop()!
+        for i in index...index+count {
+            index += 1
+            if result[i] < maxValue {
+                count -= 1
+                result[i] = Character("A")
+            } else {
+                break
+            }
+        }
+    }
+    return String(result.filter{ $0 != Character("A") })
+}
+
+// 시간초과
+func solution32(_ number:String, _ k:Int) -> String {
+    var result:[Character] = Array(number)
+    var count = k
+    var index = 0
+    while count > 0 {
+        if index+count == result.count {
+            return String(result[0..<index].filter{ $0 != Character("A") })
+        }
+        var list:[Character] = Array(result[index...index+count])
+        var maxValue:Character = list.max()!
+        for i in index...index+count {
+            index += 1
+            if result[i] < maxValue {
+                count -= 1
+                result[i] = Character("A")
+            } else {
+                break
+            }
+        }
+    }
+    return String(result.filter{ $0 != Character("A") })
+}
+
+// 시간초과
+func solution31(_ number:String, _ k:Int) -> String {
     if number.count-k == 1 {
         return String(number.sorted(by: >)[0])
     }
@@ -843,7 +1079,7 @@ func solution3(_ number:String, _ k:Int) -> String {
     return String(max)
 }
 
-solution3("1231234", 3) // 3234
+solution31("1231234", 3) // 3234
 
 /* 조이스틱
 
