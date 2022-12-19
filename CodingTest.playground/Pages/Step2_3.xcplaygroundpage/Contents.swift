@@ -337,10 +337,47 @@ solution15([[1,1,0,0],[1,0,0,0],[1,0,0,1],[1,1,1,1]]) // [4,9]
  제한사항
  n은 1 이상 1,000 이하입니다.
 */
-// TODO
 func solution14(_ n:Int) -> [Int] {
-    return []
+    var result:[[Int]] = []
+    for _ in 1...n {
+        result.append([])
+    }
+    var startIndex:Int = -1
+    var endIndex:Int = n
+    var value = 1
+    for i in 1...(n+2)/3 {
+        startIndex += 1
+        endIndex -= 1
+        if startIndex <= endIndex-1 {
+            for j in startIndex...endIndex-1 {
+                result[j].insert(value, at: i-1)
+                value += 1
+            }
+        }
+        if i <= endIndex+i-result[endIndex].count {
+            for k in i...endIndex+i-result[endIndex].count {
+                result[endIndex].insert(value, at: k-1)
+                value += 1
+            }
+        }
+        startIndex += 1
+        if 1 <= endIndex-startIndex {
+            for j in 1...endIndex-startIndex {
+                result[endIndex-j].insert(value, at:result[endIndex-j].count-i+1)
+                value += 1
+            }
+        }
+    }
+    var list:[Int] = []
+    for r in result {
+        list += r
+    }
+    return list
 }
+
+solution14(6)
+// [1, 2, 15, 3, 16, 14, 4, 17, 21, 13, 5, 18, 19, 20, 12, 6, 7, 8, 9, 10, 11]
+solution14(4)
 
 /* [카카오 인턴] 수식 최대화
 
