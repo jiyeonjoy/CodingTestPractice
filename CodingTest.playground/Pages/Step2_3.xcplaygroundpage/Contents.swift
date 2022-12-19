@@ -199,10 +199,50 @@ func solution18(_ info:[String], _ query:[String]) -> [Int] {
  만약 가장 많이 함께 주문된 메뉴 구성이 여러 개라면, 모두 배열에 담아 return 하면 됩니다.
  orders와 course 매개변수는 return 하는 배열의 길이가 1 이상이 되도록 주어집니다.
 */
-// TODO
-func solution17(_ orders:[String], _ course:[Int]) -> [String] {
-    return []
+func combinations<T>(source: [T], takenBy : Int) -> [[T]] {
+    if(source.count == takenBy) {
+        return [source]
+    }
+
+    if(source.isEmpty) {
+        return []
+    }
+
+    if(takenBy == 0) {
+        return []
+    }
+
+    if(takenBy == 1) {
+        return source.map { [$0] }
+    }
+
+    var result : [[T]] = []
+
+    let rest = Array(source.suffix(from: 1))
+    let subCombos = combinations(source: rest, takenBy: takenBy - 1)
+    result += subCombos.map { [source[0]] + $0 }
+    result += combinations(source: rest, takenBy: takenBy)
+    return result
 }
+
+func solution17(_ orders:[String], _ course:[Int]) -> [String] {
+    var result:[String] = []
+    
+    for count in course {
+        var list:[[Character]] = []
+        for order in orders.filter({ $0.count >= count }) {
+            list += combinations(source:order.sorted(by: <), takenBy: count)
+        }
+        var dic = Dictionary(grouping: list) { $0 }.sorted{ $0.value.count > $1.value.count }
+        var filter = dic.filter{ $0.value.count > 1 && $0.value.count == dic.first!.value.count }
+        for data in filter {
+            result.append(String(data.key))
+        }
+    }
+    return result.sorted(by: <)
+}
+
+solution17(["ABCFG", "AC", "CDE", "ACDE", "BCFG", "ACDEH"], [2,3,4])
 
 /* 이진 변환 반복하기
 
