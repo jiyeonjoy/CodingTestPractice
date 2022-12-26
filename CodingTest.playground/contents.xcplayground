@@ -9,6 +9,7 @@
         <page name='MaxHeap'/>
         <page name='Stack'/>
         <page name='Queue'/>
+        <page name='Deque'/>
         <page name='DFS_BFS'/>
         <page name='Step0_1'/>
         <page name='Step0_2'/>

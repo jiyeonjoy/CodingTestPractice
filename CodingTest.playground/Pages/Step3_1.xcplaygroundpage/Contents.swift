@@ -1,5 +1,380 @@
 import Foundation
 
+/* 징검다리 건너기
+
+ - [본 문제는 정확성과 효율성 테스트 각각 점수가 있는 문제입니다.]
+ 
+ 카카오 초등학교의 "니니즈 친구들"이 "라이언" 선생님과 함께 가을 소풍을 가는 중에 징검다리가 있는 개울을 만나서 건너편으로 건너려고 합니다. "라이언" 선생님은 "니니즈 친구들"이 무사히 징검다리를 건널 수 있도록 다음과 같이 규칙을 만들었습니다.
+
+ 징검다리는 일렬로 놓여 있고 각 징검다리의 디딤돌에는 모두 숫자가 적혀 있으며 디딤돌의 숫자는 한 번 밟을 때마다 1씩 줄어듭니다.
+ 디딤돌의 숫자가 0이 되면 더 이상 밟을 수 없으며 이때는 그 다음 디딤돌로 한번에 여러 칸을 건너 뛸 수 있습니다.
+ 단, 다음으로 밟을 수 있는 디딤돌이 여러 개인 경우 무조건 가장 가까운 디딤돌로만 건너뛸 수 있습니다.
+ "니니즈 친구들"은 개울의 왼쪽에 있으며, 개울의 오른쪽 건너편에 도착해야 징검다리를 건넌 것으로 인정합니다.
+ "니니즈 친구들"은 한 번에 한 명씩 징검다리를 건너야 하며, 한 친구가 징검다리를 모두 건넌 후에 그 다음 친구가 건너기 시작합니다.
+
+ 디딤돌에 적힌 숫자가 순서대로 담긴 배열 stones와 한 번에 건너뛸 수 있는 디딤돌의 최대 칸수 k가 매개변수로 주어질 때, 최대 몇 명까지 징검다리를 건널 수 있는지 return 하도록 solution 함수를 완성해주세요.
+
+ [제한사항]
+ 징검다리를 건너야 하는 니니즈 친구들의 수는 무제한 이라고 간주합니다.
+ stones 배열의 크기는 1 이상 200,000 이하입니다.
+ stones 배열 각 원소들의 값은 1 이상 200,000,000 이하인 자연수입니다.
+ k는 1 이상 stones의 길이 이하인 자연수입니다.
+*/
+func solution9(_ stones:[Int], _ k:Int) -> Int {
+    if k == 1 || stones.count == k {
+        return stones.sorted(by: <)[0]
+    }
+    var minValue = stones.min()!
+    var maxValue = stones.max()!
+    var median:Int = 0
+    while true {
+        median = (minValue+maxValue)/2
+        var count:Int = 0
+        var isDone = false
+        for stone in stones {
+            if stone <= median {
+                count += 1
+                if count >= k {
+                    isDone = true
+                    break
+                }
+            } else {
+                count = 0
+            }
+        }
+        if isDone {
+            maxValue = median
+        } else {
+            minValue = median
+        }
+        if maxValue-minValue <= 1 {
+            break
+        }
+    }
+    return maxValue
+}
+
+solution9([2, 4, 5, 3, 2, 1, 4, 2, 5, 1], 3) // 3
+
+func solution97(_ stones:[Int], _ k:Int) -> Int {
+    if k == 1 || stones.count == k {
+        return stones.sorted(by: <)[0]
+    }
+    var minValue = stones.min()!
+    var maxValue = stones.max()!
+    var median:Int = 0
+    while true {
+        median = (minValue+maxValue)/2
+        var count:Int = 0
+        var isDone = false
+        for stone in stones {
+            if stone <= median {
+                count += 1
+                if count >= k {
+                    isDone = true
+                    break
+                }
+            } else {
+                count = 0
+            }
+        }
+        if isDone {
+            maxValue = median
+        } else {
+            minValue = median
+        }
+        if maxValue-minValue <= 1 {
+            break
+        }
+    }
+    return maxValue
+}
+
+class Deque<T: Equatable> {
+    var enqueue: [T]
+    var dequeue: [T] = []
+    var count: Int {
+        return enqueue.count + dequeue.count
+    }
+    var isEmpty: Bool {
+        return enqueue.isEmpty && dequeue.isEmpty
+    }
+    var first: T? {
+        if dequeue.isEmpty {
+            return enqueue.first
+        }
+        return dequeue.last
+    }
+    init(_ queue: [T]) {
+        enqueue = queue
+    }
+    func pushFirst(_ n: T) {
+        dequeue.append(n)
+    }
+    func pushLast(_ n: T) {
+        enqueue.append(n)
+    }
+    func popFirst() -> T? {
+        if dequeue.isEmpty {
+            dequeue = enqueue.reversed()
+            enqueue.removeAll()
+        }
+        return dequeue.popLast()
+        
+    }
+    func popLast() -> T? {
+        var returnValue: T?
+        if enqueue.isEmpty {
+            dequeue.reverse()
+            returnValue = dequeue.popLast()
+            dequeue.reverse()
+        } else {
+            returnValue = enqueue.popLast()
+        }
+        return returnValue
+    }
+    func contains(_ n: T) -> Bool {
+        return enqueue.contains(n) || dequeue.contains(n)
+    }
+    func removeAll() {
+        enqueue.removeAll()
+        dequeue.removeAll()
+    }
+}
+
+struct MaxHeap<T: Comparable> {
+    var heap: [T] = []
+
+    var isEmpty: Bool {
+        heap.count <= 1 ? true : false
+    }
+
+    init() {}
+    init(_ element: T) {
+        heap.append(element)
+        heap.append(element)
+    }
+    
+    mutating func insert(_ element: T) {
+        if heap.isEmpty {
+            heap.append(element)
+            heap.append(element)
+            return
+        }
+        heap.append(element)
+        
+        func isMoveUp(_ insertIndex: Int) -> Bool {
+            if insertIndex <= 1 { // rootNode
+                return false
+            }
+            let parentIndex = insertIndex / 2
+            return heap[insertIndex] > heap[parentIndex] ? true : false
+        }
+        
+        var insertIndex: Int = heap.count - 1
+        while isMoveUp(insertIndex) {
+            let parentIndex = insertIndex / 2
+            heap.swapAt(insertIndex, parentIndex)
+            insertIndex = parentIndex
+        }
+    }
+    
+    enum moveDownStatus {case left, right, none}
+    
+    mutating func pop() -> T? {
+        if heap.count <= 1 {
+            return nil
+        }
+        let returnData = heap[1]
+        heap.swapAt(1, heap.count - 1)
+        heap.removeLast()
+        
+        func moveDown(_ poppedIndex: Int) -> moveDownStatus {
+            let leftChildIndex = poppedIndex * 2
+            let rightChildIndex = leftChildIndex + 1
+            
+            // case1. 모든(왼쪽) 자식 노드가 없는 경우, (완전이진트리는 왼쪽부터 채워지므로)
+            if leftChildIndex >= heap.count {
+                return .none
+            }
+            
+            // case2. 왼쪽 자식 노드만 있는 경우,
+            if rightChildIndex >= heap.count {
+                return heap[leftChildIndex] > heap[poppedIndex] ? .left : .none
+            }
+            
+            // case3. 왼쪽&오른쪽 자식 노드 모두 있는 경우
+            // case3-1. 자식들보다 자신이 모두 큰 경우(자신이 제일 큰 경우)
+            if (heap[poppedIndex] > heap[leftChildIndex]) && (heap[poppedIndex] > heap[rightChildIndex]) {
+                return .none
+            }
+            
+            // case3-2. 자식들이 자신보다 모두 큰 경우(왼쪽과 오른쪽 자식 중, 더 큰 자식을 선별)
+            if (heap[poppedIndex] < heap[leftChildIndex]) && (heap[poppedIndex] < heap[rightChildIndex]) {
+                return heap[leftChildIndex] > heap[rightChildIndex] ? .left : .right
+            }
+            
+            // case3-3. 왼쪽과 오른쪽 자식 중, 한 자식만 자신보다 큰 경우, (= 둘 중 하나의 자식만 큰 경우)
+            if (heap[leftChildIndex] > heap[poppedIndex]) || (heap[rightChildIndex] > heap[poppedIndex]) {
+                return heap[leftChildIndex] > heap[rightChildIndex] ? .left : .right
+            }
+            return .none
+        }
+        
+        var poppedIndex = 1
+        while true {
+            switch moveDown(poppedIndex) {
+            case .none:
+                return returnData
+            case .left:
+                let leftChildIndex = poppedIndex * 2
+                heap.swapAt(leftChildIndex, poppedIndex)
+                poppedIndex = leftChildIndex
+            case .right:
+                let rightChildIndex = poppedIndex * 2 + 1
+                heap.swapAt(rightChildIndex, poppedIndex)
+                poppedIndex = rightChildIndex
+            }
+        }
+        
+    }
+    
+}
+
+func solution96(_ stones:[Int], _ k:Int) -> Int {
+    if k == 1 || stones.count == k {
+        return stones.sorted(by: <)[0]
+    }
+    var myMaxHeap: MaxHeap<Int> = MaxHeap()
+    for i in 0...k-1 {
+        myMaxHeap.insert(stones[i])
+    }
+    var result:Int = myMaxHeap.pop()!
+    var index = k
+    while true {
+        if stones[index] >= result {
+            index += k-1
+        } else {
+            myMaxHeap.heap = []
+            for i in index-k+1...index {
+                myMaxHeap.insert(stones[i])
+            }
+            let maxValue:Int = myMaxHeap.pop()!
+            if maxValue < result {
+                result = maxValue
+            }
+            index += 1
+        }
+        if index >= stones.count {
+            break;
+        }
+    }
+    return result
+}
+
+func solution95(_ stones:[Int], _ k:Int) -> Int {
+    if k == 1 || stones.count == k {
+        return stones.sorted(by: <)[0]
+    }
+    var deque: Deque<Int> = Deque(Array(stones[0...k-1]))
+    var result:Int = deque.enqueue.max() ?? 0
+    var passValue:Int = 0
+    for i in k...stones.count-1 {
+        deque.popFirst()
+        deque.pushLast(stones[i])
+        if stones[i] >= result {
+            passValue = i+k-1
+        } else if passValue < i {
+            let maxValue:Int = max(deque.enqueue.max() ?? 0, deque.dequeue.max() ?? 0)
+            if maxValue < result {
+                result = maxValue
+            }
+        }
+    }
+    return result
+}
+
+func solution94(_ stones:[Int], _ k:Int) -> Int {
+    if k == 1 || stones.count == k {
+        return stones.sorted(by: <)[0]
+    }
+    var myMaxHeap: MaxHeap<Int> = MaxHeap()
+    for i in 0...k-1 {
+        myMaxHeap.insert(stones[i])
+    }
+    var result:Int = myMaxHeap.pop()!
+    for i in k...stones.count-k {
+        if stones[i] < result {
+            myMaxHeap.heap = []
+            for j in 0...k-1 {
+                myMaxHeap.insert(stones[i+j])
+            }
+            let maxValue = myMaxHeap.pop()!
+            if maxValue < result {
+                result = maxValue
+            }
+        }
+    }
+    return result
+}
+
+// 효율성 실패
+func solution93(_ stones:[Int], _ k:Int) -> Int {
+    var list:Set<Int> = Set<Int>()
+    list.formUnion(stones)
+    for i in list.sorted(by: <) {
+        var count:Int = 0
+        for stone in stones {
+            if stone <= i {
+                count += 1
+                if count == k {
+                    return i
+                }
+            } else {
+                count = 0
+            }
+        }
+    }
+    return 0
+}
+
+// 효율성 실패
+func solution92(_ stones:[Int], _ k:Int) -> Int {
+    var result: Int = 200000000
+    for i in 0...stones.count-k {
+        if stones[i] < result {
+            let maxValue = stones[i..<i+k].max()!
+            if maxValue < result {
+                result = maxValue
+            }
+        }
+    }
+    return result
+}
+
+// 효율성 실패
+func solution91(_ stones:[Int], _ k:Int) -> Int {
+    var result:Int = 0
+    var list = stones
+    while true {
+        var count:Int = 0
+        for i in 0...stones.count-1 {
+            if list[i] > 0 {
+                list[i] = list[i]-1
+                count = 0
+            } else {
+                count += 1
+                if count == k {
+                    return result
+                }
+            }
+        }
+        result += 1
+    }
+    
+    return result
+}
+
 /* [카카오 인턴] 보석 쇼핑
 
  - [본 문제는 정확성과 효율성 테스트 각각 점수가 있는 문제입니다.]
