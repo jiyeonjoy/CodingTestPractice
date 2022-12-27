@@ -554,10 +554,63 @@ func solution11(_ w:Int, _ h:Int) -> Int64{
  문자열 p를 이루는 '(' 와 ')' 의 개수는 항상 같습니다.
  만약 p가 이미 "올바른 괄호 문자열"이라면 그대로 return 하면 됩니다.
 */
-// TODO
 func solution10(_ p:String) -> String {
-    return ""
+    func setRightString(p:String, second:String) -> String {
+        if p == "" {
+            return ""
+        }
+        var result:String = "("
+        result += getRightString(p: second)
+        result += ")"
+        for i in 1..<p.count-1 {
+            if Array(p)[i] == "(" {
+                result += ")"
+            } else {
+                result += "("
+            }
+        }
+        return result
+    }
+    
+    func getRightString(p:String) -> String {
+        if p == "" {
+            return ""
+        }
+        var first:[Character] = []
+        var second:[Character] = []
+        var value:Int = 0
+        var index = 0
+        var isWright = true
+        for s in p {
+            if s == "(" {
+                value -= 1
+            } else {
+                value += 1
+            }
+            index += 1
+            if value == 0 {
+                break
+            } else if value > 0 {
+                isWright = false
+            }
+        }
+        first = Array(Array(p)[0..<index])
+        if index+1 < p.count {
+            second = Array(Array(p)[index..<p.count])
+        }
+        if !isWright {
+            first = Array(setRightString(p: String(first), second: String(second)))
+            second = []
+        } else {
+            second = Array(getRightString(p: String(second)))
+        }
+        return String(first+second)
+    }
+    return getRightString(p: p)
 }
+
+solution10("()))((()")
+solution10("(()())()")
 
 /* 문자열 압축
 
