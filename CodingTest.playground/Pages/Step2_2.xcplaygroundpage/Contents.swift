@@ -565,10 +565,42 @@ solution11("KAKAO")
  출력 형식
  조건과 일치하는 음악 제목을 출력한다.
 */
-// TODO
 func solution10(_ m:String, _ musicinfos:[String]) -> String {
-    return ""
+    var result:String = "(None)"
+    var maxLength = 0
+    for str in musicinfos {
+        let list:[String] = str.components(separatedBy: ",")
+        let startTime:[Int] = list[0].components(separatedBy: ":").map{ Int($0) ?? 0 }
+        let endTime:[Int] = list[1].components(separatedBy: ":").map{ Int($0) ?? 0 }
+        let duration:Int = (endTime[0] - startTime[0])*60 + (endTime[1] - startTime[1])
+        if duration > maxLength {
+            var music:[Character] = []
+            var index = 0
+            var musicList = Array(list[3])
+            for _ in 1...duration {
+                music.append(musicList[index%list[3].count])
+                index += 1
+                if index%list[3].count < musicList.count && musicList[index%list[3].count] == "#" {
+                    music.append("#")
+                    index += 1
+                }
+            }
+            if String(music).contains(m) {
+                var musicCount = String(music).components(separatedBy: m).filter({ $0.count == 0 || Array($0)[0] != "#" }).count
+                if musicCount > 1 {
+                    maxLength = duration
+                    result = list[2]
+                }
+            }
+        }
+    }
+    return result
 }
+
+solution10("ABC", ["12:00,12:14,HELLO,C#DEFGAB", "13:00,13:15,WORLD,ABC#DEFAB"])
+solution10("ABC", ["12:00,12:14,HELLO,C#DEFGAB", "13:00,13:05,WORLD,ABCDEF"])
+solution10("CC#BCC#BCC#BCC#B", ["03:00,03:30,FOO,CC#B", "04:00,04:08,BAR,CC#BCC#BCC#B"])
+solution10("ABCDEFG", ["12:00,12:14,HELLO,CDEFGAB", "13:00,13:05,WORLD,ABCDEF"])
 
 /* [1차] 캐시
 
