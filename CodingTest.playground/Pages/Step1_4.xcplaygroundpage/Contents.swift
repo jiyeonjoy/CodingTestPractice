@@ -32,12 +32,10 @@ func solution4(_ today:String, _ terms:[String], _ privacies:[String]) -> [Int] 
         var pm = pl[1]
         let pd = pl[2]
         
-        if pm+dic[list[1]]! > 12 {
-            pm += dic[list[1]]!-12
-            py += 1
-        } else {
-            pm += dic[list[1]]!
-        }
+        pm += dic[list[1]]!
+        py += (pm-1)/12
+        pm = pm%12 == 0 ? 12 : pm%12
+        
         if py < y {
             result.append(i+1)
         } else if py == y {
