@@ -18,10 +18,9 @@ struct Stack<T> {
     public mutating func pop() -> T? {
         return isEmpty ? nil : stack.popLast()!
     }
-    
 }
 
 var myStack: Stack = Stack<Int>()
 myStack.push(10)
 print(myStack.pop()!)
-print(myStack.pop())
+print(myStack.pop()!)
