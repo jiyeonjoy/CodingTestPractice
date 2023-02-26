@@ -146,6 +146,22 @@ solution10([[1, 4], [3, 2], [4, 1]],[[3, 3], [3, 3]])
  제한사항
  n은 15이하의 자연수 입니다.
 */
+func solution92(_ n:Int) -> [[Int]] {
+    var result:[[Int]] = []
+    func hanoi(_ n:Int, _ start:Int, _ middle:Int, _ end:Int) {
+        if(n == 1) {
+            result.append([start, end])
+            return
+        }
+        hanoi(n-1, start, end, middle)
+        hanoi(1, start, middle, end)
+        hanoi(n-1, middle, start, end)
+    }
+    hanoi(n, 1, 2, 3)
+    
+    return result
+}
+
 func solution91(_ n:Int) -> [[Int]] {
     var result:[[Int]] = []
     var isEven = n%2==0
