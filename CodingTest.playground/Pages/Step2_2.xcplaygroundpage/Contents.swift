@@ -998,6 +998,15 @@ func gcd(_ a: Int, _ b: Int) -> Int{
 func lcm(_ a: Int, _ b: Int) -> Int {
     return a * b / gcd(a, b)
 }
+
+func solution11(_ arr:[Int]) -> Int {
+    var result:Int = arr[0]
+    for i in 1...arr.count-1 {
+        result = lcm(result,arr[i])
+    }
+    return result
+}
+
 func solution1(_ arr:[Int]) -> Int {
     var sorted:[Int] = arr.sorted(by: >)
     var result:Int = sorted[0]
