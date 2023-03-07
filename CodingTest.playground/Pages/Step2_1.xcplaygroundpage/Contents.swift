@@ -83,6 +83,27 @@ solution12(5)
  숫자로만 이루어진 단어는 없습니다.
  공백문자가 연속해서 나올 수 있습니다.
 */
+func solution111(_ s:String) -> String {
+    let list:[String] = s.components(separatedBy: " ")
+    var result = ""
+    for i in 0..<list.count {
+        if list[i].count == 1 {
+            result += "\(list[i].uppercased()) "
+        } else if list[i].count > 1 {
+            var strList:[Character] = Array(list[i])
+            result += "\(String(strList.removeFirst()).uppercased())\(String(strList).lowercased()) "
+        } else {
+            result += " "
+        }
+    }
+    result.removeLast()
+    
+    return result
+}
+
+print("//\(solution111("m  "))//")
+print("//\(solution111("3people unFollowed me"))//")
+
 func solution11(_ s:String) -> String {
     if s.count == 1 {
         return s.uppercased()
@@ -103,7 +124,8 @@ func solution11(_ s:String) -> String {
     return result
 }
 
-solution11("3people unFollowed me")
+print("//\(solution11("m  "))//")
+print("//\(solution11("3people unFollowed me"))//")
 
 /* 행렬의 곱셈
 
