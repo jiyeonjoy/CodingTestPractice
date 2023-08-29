@@ -1,5 +1,448 @@
 import Foundation
 
+func solution55(_ n:Int, _ k:Int) -> [Int] {
+    var a:[Int] = []
+    for i in 1...n {
+        if i%k == 0 {
+            a.append(i)
+        }
+    }
+    return a
+}
+
+func solution54(_ my_string:String) -> [Int] {
+    let alphabet = Array("ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz")
+    var a:[Int] = []
+    for i in 0..<alphabet.count {
+        a.append(my_string.filter{ $0 == alphabet[i] }.count)
+    }
+    return a
+}
+
+solution54("Programmers")
+
+func solution53(_ q:Int, _ r:Int, _ code:String) -> String {
+    let arr = Array(code)
+    var a:[Character] = []
+    for i in 0..<code.count {
+        if i%q == r {
+            a.append(arr[i])
+        }
+    }
+    return String(a)
+}
+
+func solution52(_ my_string:String, _ m:Int, _ c:Int) -> String {
+    let arr = Array(my_string)
+    var a:[Character] = []
+    for i in 0..<my_string.count/m {
+        a.append(arr[i*m+c-1])
+    }
+    return String(a)
+}
+
+solution52("ihrhbakrfpndopljhygc", 4, 2)
+
+func solution51(_ my_string:String, _ s:Int, _ e:Int) -> String {
+    let arr1 = Array(my_string)
+    var arr = Array(my_string)
+    for i in s...e {
+        arr[i] = arr1[e+s-i]
+    }
+    return String(arr)
+}
+
+func solution50(_ my_string:String, _ is_prefix:String) -> Int {
+    if my_string.count < is_prefix.count {
+        return 0
+    }
+    return String(Array(my_string)[0..<is_prefix.count]) == is_prefix ? 1 : 0
+}
+
+func solution49(_ my_string:String, _ n:Int) -> String {
+    return String(Array(my_string)[0..<n])
+}
+
+func solution48(_ my_string:String, _ is_suffix:String) -> Int {
+    if my_string.count < is_suffix.count {
+        return 0
+    }
+    
+    return String(Array(my_string)[my_string.count-is_suffix.count..<my_string.count]) == is_suffix ? 1 : 0
+}
+
+func solution47(_ my_string:String) -> [String] {
+    var a:[String] = []
+    let arr = Array(my_string)
+    for i in 0..<my_string.count {
+        a.append(String(arr[i..<my_string.count]))
+    }
+    
+    return a.sorted()
+}
+
+solution47("banana")
+
+func solution46(_ my_string:String, _ n:Int) -> String {
+    return String(Array(my_string)[my_string.count-n..<my_string.count])
+}
+
+func solution45(_ my_strings:[String], _ parts:[[Int]]) -> String {
+    var str = ""
+    for i in 0..<my_strings.count {
+        str += String(Array(my_strings[i])[parts[i][0]...parts[i][1]])
+    }
+    return str
+}
+
+solution45(["progressive", "hamburger", "hammer", "ahocorasick"],[[0, 4], [1, 2], [3, 5], [7, 7]])
+
+func solution44(_ intStrs:[String], _ k:Int, _ s:Int, _ l:Int) -> [Int] {
+    var a:[Int] = []
+    let kStr = Array(String(k))
+    for str in intStrs {
+        let strArray = Array(str)[s..<s+l]
+        var isM = true
+        for i in 0..<l {
+            if strArray[s+i] < kStr[i] {
+                isM = false
+                break
+            } else if strArray[s+i] > kStr[i] {
+                isM = true
+                break
+            } else if i == l-1 {
+                isM = false
+            }
+        }
+        if isM {
+            let n = Int(String(strArray)) ?? 0
+            a.append(n)
+        }
+    }
+    return a
+}
+
+solution44(["0123456789","9876543210","9999999999999"], 50000, 5, 5)
+
+func solution43(_ my_string:String, _ queries:[[Int]]) -> String {
+    var arr = Array(my_string)
+    for q in queries {
+        let s = q[0]
+        let e = q[1]
+        let list = Array(arr[s...e].reversed())
+        for i in s...e {
+            arr[i] = list[i-s]
+        }
+    }
+    return String(arr)
+}
+
+solution43("rermgorpsam", [[2, 3], [0, 7], [5, 9], [6, 10]])
+
+func solution42(_ number:String) -> Int {
+    var sum = 0
+    number.map{
+        sum += (Int(String($0)) ?? 0)
+    }
+    return sum%9
+}
+
+solution42("123")
+
+func solution41(_ my_string:String, _ index_list:[Int]) -> String {
+    var a = ""
+    let arr = Array(my_string)
+    for i in index_list {
+        a += String(arr[i])
+    }
+    return a
+}
+
+func solution40(_ a:Int, _ b:Int, _ c:Int, _ d:Int) -> Int {
+    let list = [a, b, c, d].sorted()
+    let n1 = list[0]
+    let n2 = list[1]
+    let n3 = list[2]
+    let n4 = list[3]
+    var a = 0
+    if n1 == n4 {
+        a = 1111*n1
+    } else if n1 == n2 && n1 == n3 {
+        a = Int(pow(Double(10*n1+n4), 2))
+    } else if n2 == n3 && n2 == n4 {
+        a = Int(pow(Double(10*n4+n1), 2))
+    } else if n1 == n2 && n3 == n4 {
+        a = (n1+n3)*abs(n1-n3)
+    } else if n1 == n2 {
+        a = n3*n4
+    } else if n2 == n3 {
+        a = n1*n4
+    } else if n3 == n4 {
+        a = n1*n2
+    } else {
+        a = n1
+    }
+    return a
+}
+
+solution40(2,2,2,2)
+solution40(4,1,4,4)
+solution40(6,3,3,6)
+solution40(2,5,2,6)
+
+func solution39(_ x1:Bool, _ x2:Bool, _ x3:Bool, _ x4:Bool) -> Bool {
+    return (x1 || x2)&&(x3 || x4)
+}
+
+func solution38(_ arr:[Int]) -> [Int] {
+    var stk: [Int] = []
+    var i = 0
+    while i < arr.count {
+        if stk.count == 0 {
+            stk.append(arr[i])
+            i += 1
+        } else {
+            if (stk.last ?? 0) < arr[i] {
+                stk.append(arr[i])
+                i += 1
+            } else {
+                stk.removeLast()
+            }
+        }
+    }
+    return stk
+}
+
+solution38([1, 4, 2, 5, 3])
+
+func solution37(_ n:Int) -> [Int] {
+    var a: [Int] = [n]
+    var n = n
+    while n != 1 {
+        if n%2 == 0 {
+            n /= 2
+        } else {
+            n = 3*n+1
+        }
+        a.append(n)
+    }
+    return a
+}
+
+solution37(10)
+
+func solution36(_ start_num:Int, _ end_num:Int) -> [Int] {
+    var a: [Int] = []
+    for n in start_num...end_num {
+        a.append(n)
+    }
+    return a
+}
+
+func solution35(_ l:Int, _ r:Int) -> [Int] {
+    if l > r {
+        return [-1]
+    }
+    var a: [Int] = []
+    for n in l...r {
+        let c = String(n).filter{ $0 != "0" && $0 != "5" }.count
+        if c == 0 {
+            a.append(n)
+        }
+    }
+    return a.count == 0 ? [-1] : a
+}
+
+solution35(5, 5)
+
+func solution34(_ arr:[Int], _ queries:[[Int]]) -> [Int] {
+    var a = arr
+    for q in queries {
+        let s = q[0]
+        let e = q[1]
+        let k = q[2]
+        for i in s...e {
+            if i%k == 0 {
+                a[i] += 1
+            }
+        }
+    }
+    return a
+}
+
+solution34([0, 1, 2, 4, 3], [[0, 4, 1],[0, 3, 2],[0, 3, 3]])
+
+func solution33(_ arr:[Int], _ queries:[[Int]]) -> [Int] {
+    var a: [Int] = []
+    for q in queries {
+        var n = -1
+        for i in q[0]...q[1] {
+            if arr[i] > q[2] {
+                if n == -1 {
+                    n = arr[i]
+                } else {
+                    n = min(n, arr[i])
+                }
+            }
+        }
+        a.append(n)
+    }
+    return a
+}
+
+solution33([0, 1, 2, 4, 3], [[0, 4, 2],[0, 3, 2],[0, 2, 2]])
+
+func solution32(_ arr:[Int], _ queries:[[Int]]) -> [Int] {
+    var a = arr
+    for q in queries {
+        let i1 = q[0]
+        let i2 = q[1]
+        let temp = a[i1]
+        a[i1] = a[i2]
+        a[i2] = temp
+    }
+    return a
+}
+
+solution32([0, 1, 2, 3, 4], [[0, 3],[1, 2],[1, 4]])
+
+func solution31(_ numLog:[Int]) -> String {
+    var n = numLog[0]
+    var a = ""
+    for num in numLog {
+        if num-n == 1 {
+            a += "w"
+        } else if num-n == -1 {
+            a += "s"
+        } else if num-n == 10 {
+            a += "d"
+        } else if num-n == -10 {
+            a += "a"
+        }
+        n = num
+    }
+    return a
+}
+
+solution31([0, 1, 0, 10, 0, 1, 0, 10, 0, -1, -2, -1])
+
+func solution30(_ n:Int, _ control:String) -> Int {
+    var a = n
+    for c in control {
+        if c == "w" {
+            a += 1
+        } else if c == "s" {
+            a -= 1
+        } else if c == "d" {
+            a += 10
+        } else {
+            a -= 10
+        }
+    }
+    return a
+}
+
+solution30(0, "wsdawsdassw")
+
+func solution29(_ num_list:[Int]) -> [Int] {
+    var answer = num_list
+    if num_list.count < 2 {
+        return num_list
+    }
+    let n1 = num_list[num_list.count-1]
+    let n2 = num_list[num_list.count-2]
+    if n1 > n2 {
+        answer.append(n1-n2)
+    } else {
+        answer.append(n1*2)
+    }
+    return answer
+}
+
+func solution28(_ num_list:[Int]) -> Int {
+    var n1 = 0
+    var n2 = 0
+    if num_list.count == 0 {
+        return 0
+    }
+    for n in num_list {
+        if n%2 == 0 {
+            n1 = n1*10+n
+        } else {
+            n2 = n2*10+n
+        }
+    }
+    return n1+n2
+}
+solution28([3, 4, 5, 2, 1])
+solution28([5, 7, 8, 3])
+
+func solution27(_ num_list:[Int]) -> Int {
+    var n1 = num_list.reduce(1, *)
+    var n2 = Int(pow(Double(num_list.reduce(0, +)),2))
+    return n1 > n2 ? 0 : 1
+}
+
+solution27([3, 4, 5, 2, 1])
+
+func solution26(_ a:Int, _ b:Int, _ c:Int) -> Int {
+    var answer = 0
+    if a == b && a == c {
+        answer = (a+b+c)*Int(pow(Double(a), 2)+pow(Double(b), 2)+pow(Double(c), 2))*Int(pow(Double(a), 3)+pow(Double(b), 3)+pow(Double(c), 3))
+    } else if a == b || a == c || b == c {
+        answer = (a+b+c)*Int(pow(Double(a), 2)+pow(Double(b), 2)+pow(Double(c), 2))
+    } else {
+        answer = (a+b+c)
+    }
+    return answer
+}
+
+solution26(2,6,1)
+solution26(5,3,3)
+solution26(4,4,4)
+solution26(6,6,6)
+
+func solution25(_ a:Int, _ d:Int, _ included:[Bool]) -> Int {
+    var answer = 0
+    for i in 0..<included.count {
+        if included[i] {
+            answer += a+i*d
+        }
+    }
+    return answer
+}
+
+solution25(3, 4, [true, false, false, true, true])
+
+func solution24(_ code:String) -> String {
+    let array = Array(code)
+    var isZeroMode = true
+    var ret = ""
+    
+    for i in 0..<code.count {
+        if array[i] == "1" {
+            isZeroMode.toggle()
+        } else if isZeroMode {
+            if i%2 == 0 {
+                ret += String(array[i])
+            }
+        } else if i%2 == 1 {
+                ret += String(array[i])
+        }
+    }
+    return ret.isEmpty ? "EMPTY" : ret
+}
+
+solution24("abc1abc1abc")
+
+func solution23(_ a:Int, _ b:Int, _ flag:Bool) -> Int {
+    return flag ? a+b : a-b
+}
+
+func solution22(_ a:Int, _ b:Int, _ flag:Bool) -> Int {
+    return flag ? a+b : a-b
+}
+
 func solution21(_ a: Int, _ b: Int) -> Int {
     let n1 = Int(truncating: NSDecimalNumber(decimal: pow(10, String(b).count)*Decimal(a)+Decimal(b)))
     let n2 = Int(truncating: NSDecimalNumber(decimal: pow(10, String(a).count)*Decimal(b)+Decimal(a)))
