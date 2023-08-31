@@ -1,14 +1,196 @@
 import Foundation
 
+func solution50(_ arr:[Int]) -> [Int] {
+    var a = arr
+    var n = 1
+    while true {
+        if n == a.count {
+            break
+        } else if n < a.count {
+            n *= 2
+        } else {
+            a.append(0)
+        }
+    }
+    return a
+}
+
+func solution49(_ arr1:[Int], _ arr2:[Int]) -> Int {
+    if arr1.count != arr2.count {
+        return arr1.count > arr2.count ? 1 : -1
+    } else {
+        let sum1 = arr1.reduce(0, +)
+        let sum2 = arr2.reduce(0, +)
+        return sum1 > sum2 ? 1 : sum1 == sum2 ? 0 : -1
+    }
+}
+
+func solution48(_ strArr:[String]) -> Int {
+    var arr = Array.init(repeating: 0, count: 30)
+    for str in strArr {
+        let n = str.count
+        arr[n-1] += 1
+    }
+    return arr.max()!
+}
+
+solution48(["a","bc","d","efg","hi"])
+
+func solution47(_ arr:[Int], _ n:Int) -> [Int] {
+    var a = arr
+    if arr.count%2 == 1 {
+        for (i, v) in arr.enumerated() {
+            if i%2 == 0 {
+                a[i] = v+n
+            }
+        }
+    } else {
+        for (i, v) in arr.enumerated() {
+            if i%2 == 1 {
+                a[i] = v+n
+            }
+        }
+    }
+    return a
+}
+
+func solution46(_ num_list:[Int]) -> [Int] {
+    var arr = num_list
+    var a:[Int] = []
+
+    for _ in 1...5 {
+        a.append(arr.min()!)
+        arr.remove(at: arr.firstIndex(of: arr.min()!)!)
+    }
+    return a
+}
+
+func solution45(_ num_list:[Int]) -> [Int] {
+    var arr = num_list
+    for _ in 1...5 {
+        let index = num_list.firstIndex(of: arr.min()!) ?? 0
+        arr.remove(at: index)
+    }
+    return arr.sorted(by: >)
+}
+
+func solution44(_ rank:[Int], _ attendance:[Bool]) -> Int {
+    var list: [Int] = []
+    for n in 1...rank.count {
+        let i = rank.firstIndex(of: n) ?? 0
+        if attendance[i] {
+            if list.count < 3 {
+                list.append(i)
+            }
+            if list.count == 3 {
+                break
+            }
+        }
+    }
+    
+    var a = list[0]*10000+list[1]*100+list[2]
+    return a
+}
+
+solution44([3, 7, 2, 5, 4, 6, 1], [false, true, true, true, true, false, false]) // 20403
+
+func solution43(_ flo:Double) -> Int {
+    return Int(flo)
+}
+
+func solution42(_ num_str:String) -> Int {
+    return num_str.map{ Int(String($0)) ?? 0 }.reduce(0, +)
+}
+
+func solution41(_ myString:String) -> [Int] {
+    let arr = Array(myString)
+    var a:[Int] = []
+    var n = 0
+    for c in arr {
+        if c == "x" {
+            print(c)
+            a.append(n)
+            n = 0
+        } else {
+            n += 1
+        }
+    }
+    a.append(n)
+    return a
+}
+
+solution41("xabcxdefxghi")
+
+func solution40(_ myString:String) -> [String] {
+    return myString.split(separator: "x").compactMap { String($0) }.sorted()
+}
+
+func solution39(_ binomial:String) -> Int {
+    let arr = binomial.split(separator: " ").map{ String($0) }
+    let n1 = Int(arr[0]) ?? 0
+    let n2 = Int(arr[2]) ?? 0
+    let op = arr[1]
+    var a = 0
+    if op == "+" {
+        a = n1+n2
+    } else if op == "-" {
+        a = n1-n2
+    } else {
+        a = n1*n2
+    }
+    return a
+}
+
+func solution38(_ myString:String, _ pat:String) -> Int {
+    var str = pat.replacingOccurrences(of: "A", with: "C")
+    str = str.replacingOccurrences(of: "B", with: "A")
+    str = str.replacingOccurrences(of: "C", with: "B")
+    return myString.contains(str) ? 1 : 0
+}
+
+func solution37(_ rny_string:String) -> String {
+    return rny_string.replacingOccurrences(of: "m", with: "rn")
+}
+
+func solution36(_ myStr:String) -> [String] {
+    let arr1:[String] = myStr.split(separator: "a").map{ String($0) }
+    var arr2:[String] = []
+    var a:[String] = []
+    
+    for str in arr1 {
+        let arr = str.split(separator: "b").map{ String($0) }
+        arr2.append(contentsOf: arr)
+    }
+    
+    for str in arr2 {
+        let arr = str.split(separator: "c").map{ String($0) }
+        a.append(contentsOf: arr)
+    }
+    a.filter{ !$0.isEmpty }
+    return a.isEmpty ? ["EMPTY"] : a
+}
+
+solution36("baconlettucetomato")
+
+func solution35(_ arr:[Int]) -> [Int] {
+    var x:[Int] = []
+    for n in arr {
+        for _ in 1...n {
+            x.append(n)
+        }
+    }
+    return x
+}
+
 func solution34(_ arr:[Int], _ flag:[Bool]) -> [Int] {
     var a:[Int] = []
     for (i, v) in flag.enumerated() {
         if v {
-            for _ in 0...arr[i]*2 {
+            for _ in 1...arr[i]*2 {
                 a.append(arr[i])
             }
         } else {
-            for _ in 0...arr[i] {
+            for _ in 1...arr[i] {
                 a.removeLast()
             }
         }
