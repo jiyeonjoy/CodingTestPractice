@@ -1,5 +1,35 @@
 import Foundation
 
+/* 달리기 경주
+ 
+ - 얀에서는 매년 달리기 경주가 열립니다. 해설진들은 선수들이 자기 바로 앞의 선수를 추월할 때 추월한 선수의 이름을 부릅니다. 예를 들어 1등부터 3등까지 "mumu", "soe", "poe" 선수들이 순서대로 달리고 있을 때, 해설진이 "soe"선수를 불렀다면 2등인 "soe" 선수가 1등인 "mumu" 선수를 추월했다는 것입니다. 즉 "soe" 선수가 1등, "mumu" 선수가 2등으로 바뀝니다.
+ 
+ 선수들의 이름이 1등부터 현재 등수 순서대로 담긴 문자열 배열 players와 해설진이 부른 이름을 담은 문자열 배열 callings가 매개변수로 주어질 때, 경주가 끝났을 때 선수들의 이름을 1등부터 등수 순서대로 배열에 담아 return 하는 solution 함수를 완성해주세요.
+*/
+func solution8(_ players:[String], _ callings:[String]) -> [String] {
+    var dic1:[Int:String] = [:]
+    var dic2:[String:Int] = [:]
+    for i in 1...players.count {
+        dic1[i] = players[i-1]
+        dic2[players[i-1]] = i
+    }
+    for calling in callings {
+        let rank = dic2[calling] ?? 0
+        let name = dic1[rank-1] ?? ""
+        dic1[rank-1] = calling
+        dic1[rank] = name
+        dic2[calling] = rank-1
+        dic2[name] = rank
+    }
+    var result:[String] = []
+    for i in 1...players.count {
+        result.append(dic1[i] ?? "")
+    }
+    return result
+}
+
+solution8(["mumu", "soe", "poe", "kai", "mine"], ["kai", "kai", "mine", "mine"]) //["mumu", "kai", "mine", "soe", "poe"]
+
 /* 대충 만든 자판
 
  - 휴대폰의 자판은 컴퓨터 키보드 자판과는 다르게 하나의 키에 여러 개의 문자가 할당될 수 있습니다. 키 하나에 여러 문자가 할당된 경우, 동일한 키를 연속해서 빠르게 누르면 할당된 순서대로 문자가 바뀝니다.
